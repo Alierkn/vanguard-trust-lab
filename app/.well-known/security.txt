@@ -1,0 +1,5 @@
+Contact: https://github.com/Alierkn/vanguard-trust-lab/security/advisories/new
+Canonical: https://alierkn.github.io/vanguard-trust-lab/.well-known/security.txt
+Policy: https://github.com/Alierkn/vanguard-trust-lab/security/policy
+Preferred-Languages: en
+Expires: 2027-07-12T00:00:00Z

@@ -1,0 +1,26 @@
+flowchart LR
+    subgraph Private["Private authoring boundary"]
+        Restricted["Restricted metadata and deliverables"]
+        Authoring["Research, Lab and generated assets"]
+        Restricted --> Authoring
+    end
+
+    Manual["Manual copy and per-file cleanup"]
+
+    subgraph Candidate["Public-shaped candidate"]
+        Docs["Documentation and metadata"]
+        App["Application and screenshots"]
+        Sources["Source and claim registers"]
+        Checks["General repository checks"]
+    end
+
+    Host["Public Git, Pages and releases"]
+
+    Authoring --> Manual
+    Manual --> Docs
+    Manual --> App
+    Manual --> Sources
+    Checks -. "privacy policy distributed across files" .-> Docs
+    Docs --> Host
+    App --> Host
+    Sources --> Host

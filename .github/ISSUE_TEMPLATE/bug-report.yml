@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a reproducible defect in the educational app or repository tooling.
+title: "bug: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include credentials, malware, cheat code, bypass instructions, or third-party vulnerabilities.
+  - type: input
+    id: version
+    attributes:
+      label: Repository version or commit
+      placeholder: v1.0.0 or commit SHA
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, browser, and Node version where relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Use harmless sample data and the smallest reproducible sequence.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope confirmation
+      options:
+        - label: This report concerns this repository, not a Vanguard or third-party product vulnerability.
+          required: true

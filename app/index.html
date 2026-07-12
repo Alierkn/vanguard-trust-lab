@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none'"
+    />
+    <meta
+      name="description"
+      content="An offline educational model of Riot Vanguard's privilege boundary, public On-Demand requirement groups, and file integrity with SHA-256."
+    />
+    <title>Vanguard Trust Lab</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <a class="brand" href="#trust-model" aria-label="Vanguard Trust Lab home">Vanguard Trust Lab</a>
+      <nav class="top-nav" aria-label="Primary navigation">
+        <a class="nav-link is-active" href="#trust-model">Trust Model</a>
+        <a class="nav-link" href="#integrity-lab">Integrity Lab</a>
+        <a class="nav-link" href="#lab-purpose">Why this Lab</a>
+        <a class="nav-link" href="#sources">Sources</a>
+      </nav>
+    </header>
+
+    <main>
+      <section id="trust-model" class="workspace section-anchor" aria-labelledby="architecture-title">
+        <article class="panel architecture-panel">
+          <div class="panel-heading">
+            <div>
+              <h1 id="architecture-title">System Architecture (Vanguard)</h1>
+              <p>A simplified view of components and privilege levels.</p>
+            </div>
+          </div>
+
+          <div class="architecture-map" aria-label="Conceptual Vanguard architecture">
+            <div class="architecture-zone">
+              <div class="mode-rail">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <circle cx="12" cy="7" r="4"></circle>
+                  <path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
+                </svg>
+                <span>User<br />Mode</span>
+              </div>
+              <div class="node-stack">
+                <div class="architecture-node">
+                  <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="15" rx="2"></rect>
+                    <path d="M3 8h18"></path>
+                    <circle cx="6" cy="6" r=".5" class="fill-icon"></circle>
+                    <circle cx="8.5" cy="6" r=".5" class="fill-icon"></circle>
+                  </svg>
+                  <div>
+                    <h2>Riot / League Client</h2>
+                    <p>Game client and anti-cheat user components</p>
+                  </div>
+                </div>
+                <div class="down-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 4v14M7 13l5 5 5-5"></path></svg>
+                </div>
+                <div class="architecture-node">
+                  <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.1a1.7 1.7 0 0 0-.4-1.1 1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 3.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H2v-4h.1A1.7 1.7 0 0 0 3.2 9a1.7 1.7 0 0 0 .6-1A1.7 1.7 0 0 0 3.46 6.1l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 8.2 3.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V2h4v.1A1.7 1.7 0 0 0 14 3.2a1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 20.4 8c.1.38.3.73.6 1 .3.28.68.42 1.1.4h.1v4h-.1a1.7 1.7 0 0 0-1.1.4c-.3.27-.5.62-.6 1Z"></path>
+                  </svg>
+                  <div>
+                    <h2>vgc Service</h2>
+                    <p>Vanguard user-mode service</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="privilege-boundary">
+              <span></span>
+              <strong>Privilege Boundary</strong>
+              <span></span>
+            </div>
+
+            <div class="architecture-zone">
+              <div class="mode-rail">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M12 2 4.5 5v5.5c0 4.8 3.2 9.1 7.5 11.5 4.3-2.4 7.5-6.7 7.5-11.5V5L12 2Z"></path>
+                </svg>
+                <span>Kernel<br />Mode</span>
+              </div>
+              <div class="node-stack">
+                <div class="architecture-node">
+                  <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M12 2 4.5 5v5.5c0 4.8 3.2 9.1 7.5 11.5 4.3-2.4 7.5-6.7 7.5-11.5V5L12 2Z"></path>
+                    <rect x="9" y="10" width="6" height="5" rx="1"></rect>
+                    <path d="M10.5 10V8.5a1.5 1.5 0 0 1 3 0V10"></path>
+                  </svg>
+                  <div>
+                    <h2>vgk Driver</h2>
+                    <p>Vanguard kernel-mode driver</p>
+                  </div>
+                </div>
+                <div class="down-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 4v14M7 13l5 5 5-5"></path></svg>
+                </div>
+                <div class="architecture-node">
+                  <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="13" rx="1.5"></rect>
+                    <path d="M8 21h8M12 17v4"></path>
+                  </svg>
+                  <div>
+                    <h2>Windows Kernel / System Resources</h2>
+                    <p>Protected OS components and hardware-backed controls</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="concept-note">
+            Simplified conceptual view. Arrows show a high-level trust and communication relationship, not a complete or independently verified data flow.
+          </p>
+        </article>
+
+        <article class="panel posture-panel" aria-labelledby="posture-title">
+          <div class="panel-heading">
+            <div>
+              <h2 id="posture-title">Security Posture (On-Demand Requirements)</h2>
+              <p>Manually describe a hypothetical Windows PC.</p>
+            </div>
+            <button class="text-button" id="resetPosture" type="button">Reset</button>
+          </div>
+
+          <div class="requirement-header" aria-hidden="true">
+            <span>Public requirement group</span>
+            <span>Confirmed</span>
+          </div>
+          <div id="requirements" class="requirements" role="group" aria-label="Public On-Demand requirement groups">
+            <div class="requirement-row">
+              <div class="requirement-copy">
+                <span class="requirement-symbol" aria-hidden="true">W</span>
+                <div><strong>Windows 11 25H2 or later</strong><small>Required for the documented runtime report.</small></div>
+              </div>
+              <button class="switch" type="button" role="switch" aria-checked="false" data-requirement="windows" aria-label="Confirm Windows 11 25H2 or later">
+                <span class="switch-thumb"></span><span class="switch-label">Off</span>
+              </button>
+            </div>
+            <div class="requirement-row">
+              <div class="requirement-copy">
+                <span class="requirement-symbol" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="10" rx="2"></rect><path d="M8.5 10V7.5a3.5 3.5 0 0 1 7 0V10"></path></svg>
+                </span>
+                <div><strong>Secure Boot (UEFI mode)</strong><small>Helps protect the boot chain.</small></div>
+              </div>
+              <button class="switch" type="button" role="switch" aria-checked="false" data-requirement="secureBoot" aria-label="Confirm Secure Boot and UEFI mode">
+                <span class="switch-thumb"></span><span class="switch-label">Off</span>
+              </button>
+            </div>
+            <div class="requirement-row">
+              <div class="requirement-copy">
+                <span class="requirement-symbol" aria-hidden="true">T</span>
+                <div><strong>TPM 2.0</strong><small>Hardware-backed measurement and key support.</small></div>
+              </div>
+              <button class="switch" type="button" role="switch" aria-checked="false" data-requirement="tpm" aria-label="Confirm TPM 2.0">
+                <span class="switch-thumb"></span><span class="switch-label">Off</span>
+              </button>
+            </div>
+            <div class="requirement-row">
+              <div class="requirement-copy">
+                <span class="requirement-symbol" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 2 4.5 5v5.5c0 4.8 3.2 9.1 7.5 11.5 4.3-2.4 7.5-6.7 7.5-11.5V5L12 2Z"></path></svg>
+                </span>
+                <div><strong>VBS / HVCI (Memory Integrity)</strong><small>Strengthens kernel code-integrity enforcement.</small></div>
+              </div>
+              <button class="switch" type="button" role="switch" aria-checked="false" data-requirement="hvci" aria-label="Confirm VBS and HVCI">
+                <span class="switch-thumb"></span><span class="switch-label">Off</span>
+              </button>
+            </div>
+            <div class="requirement-row">
+              <div class="requirement-copy">
+                <span class="requirement-symbol" aria-hidden="true">I/O</span>
+                <div><strong>IOMMU (DMA Protection)</strong><small>Restricts device access to system memory.</small></div>
+              </div>
+              <button class="switch" type="button" role="switch" aria-checked="false" data-requirement="iommu" aria-label="Confirm IOMMU">
+                <span class="switch-thumb"></span><span class="switch-label">Off</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="postureResult" class="posture-result is-incomplete" aria-live="polite">
+            <div class="result-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"></path><circle cx="12" cy="12" r="9"></circle></svg>
+            </div>
+            <div>
+              <h3>Checklist incomplete — <span id="confirmedCount">0 of 5</span> public groups confirmed.</h3>
+              <p id="postureMessage">No attributes are confirmed. This page has not inspected a device.</p>
+              <ul id="missingRequirements" class="missing-list"></ul>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section id="integrity-lab" class="panel integrity-panel section-anchor" aria-labelledby="integrity-title">
+        <div class="panel-heading">
+          <div>
+            <h2 id="integrity-title">File Integrity Lab</h2>
+            <p>Compare harmless local files with an in-memory SHA-256 baseline.</p>
+          </div>
+        </div>
+
+        <div class="integrity-workflow">
+          <div class="integrity-step select-step">
+            <h3><span>1</span> Select File</h3>
+            <label id="dropZone" class="drop-zone" for="fileInput">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 7h6l2 2h10v10H3Z"></path><path d="M3 7V5h6l2 2"></path></svg>
+              <span><strong>Choose or drop a file</strong><small>Processed locally; maximum 50 MiB</small></span>
+              <input id="fileInput" type="file" />
+            </label>
+            <div class="sample-actions" aria-label="Built-in deterministic samples">
+              <button id="loadSampleA" class="sample-button" type="button">Load Sample A</button>
+              <button id="loadSampleB" class="sample-button" type="button">Load modified B</button>
+            </div>
+            <p id="fileMeta" class="step-meta">No file selected.</p>
+          </div>
+
+          <div class="integrity-step digest-step">
+            <h3><span>2</span> SHA-256 Digest</h3>
+            <div id="digestOutput" class="digest-output" tabindex="0" aria-label="Current SHA-256 digest">—</div>
+            <button id="copyDigest" class="secondary-button" type="button" disabled>Copy digest</button>
+          </div>
+
+          <div class="integrity-step baseline-step">
+            <h3><span>3</span> Baseline</h3>
+            <p id="baselineMeta" class="step-copy">No baseline set for this session.</p>
+            <div class="button-stack">
+              <button id="setBaseline" class="primary-button" type="button" disabled>Set as baseline</button>
+              <button id="clearBaseline" class="text-button" type="button" disabled>Clear baseline</button>
+            </div>
+          </div>
+
+          <div class="integrity-step compare-step">
+            <h3><span>4</span> Compare</h3>
+            <p class="step-copy">Select a second file, then compare its bytes with the baseline.</p>
+            <button id="compareBaseline" class="secondary-button" type="button" disabled>Compare with baseline</button>
+          </div>
+
+          <div class="integrity-step result-step">
+            <h3>Result</h3>
+            <div id="integrityResult" class="integrity-result is-idle" aria-live="polite">
+              <strong>—</strong>
+              <span>No comparison yet.</span>
+            </div>
+          </div>
+        </div>
+        <p id="hashStatus" class="hash-status" role="status" aria-live="polite"></p>
+        <p id="hashError" class="hash-error" role="alert" hidden></p>
+      </section>
+
+      <aside class="education-note" aria-label="Educational limitation">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v6M12 7h.01"></path></svg>
+        <p><strong>Educational model based on public documentation.</strong> Not a Vanguard audit or security assessment. Checklist values are entered manually, and hashing never proves that a baseline file is safe or authentic.</p>
+      </aside>
+
+      <section id="lab-purpose" class="concept-section section-anchor" aria-labelledby="lab-purpose-title">
+        <div>
+          <h2 id="lab-purpose-title">Why this Lab exists</h2>
+          <p>It converts bounded research claims into a safe, reproducible experiment on any modern desktop browser.</p>
+        </div>
+        <dl class="concept-list">
+          <div><dt>Make boundaries visible</dt><dd>The diagram exposes where authority and failure impact change across user and kernel modes.</dd></div>
+          <div><dt>Test a claim</dt><dd>Deterministic samples make the difference between byte integrity and authenticity directly observable.</dd></div>
+          <div><dt>Stay ethically bounded</dt><dd>The Lab teaches the model without inspecting proprietary software, devices, accounts, memory, or traffic.</dd></div>
+          <div><dt>Remain cross-platform</dt><dd>Static web standards make the same exercise reproducible on macOS, Windows, and Linux.</dd></div>
+        </dl>
+      </section>
+
+      <section id="sources" class="sources-section section-anchor" aria-labelledby="sources-title">
+        <div class="sources-heading">
+          <div>
+            <h2 id="sources-title">Sources and limitations</h2>
+            <p>Product statements, platform mechanisms, project inference, and Lab results stay separate.</p>
+          </div>
+        </div>
+        <div class="source-table-wrapper">
+          <table>
+            <thead><tr><th>Evidence</th><th>Used for</th><th>Important limitation</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><a href="https://www.riotgames.com/en/news/a-message-about-vanguard-from-our-security-privacy-teams" target="_blank" rel="noreferrer">Riot Security &amp; Privacy Architecture (2020)</a></td>
+                <td>Client, driver, and platform component model.</td>
+                <td>Vendor description; private implementation details are not independently verified.</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.leagueoflegends.com/en-us/news/dev/dev-vanguard-x-lol/" target="_blank" rel="noreferrer">Vanguard x LoL (2024)</a></td>
+                <td>League threat context and the earlier boot-start trust model.</td>
+                <td>Riot's own explanation, not an independent effectiveness study.</td>
+              </tr>
+              <tr>
+                <td><a href="https://www.riotgames.com/en/news/vanguard-on-demand" target="_blank" rel="noreferrer">Vanguard On-Demand (24 June 2026)</a></td>
+                <td>Five public requirement groups and optional On-Demand operation.</td>
+                <td>The checklist is a teaching summary, not the real Vanguard Pre-Check.</td>
+              </tr>
+              <tr>
+                <td><a href="https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getruntimeattestationreport" target="_blank" rel="noreferrer">Microsoft Runtime Attestation Report API</a></td>
+                <td>OS-native driver attestation background.</td>
+                <td>The API does not reveal Riot's private implementation.</td>
+              </tr>
+              <tr>
+                <td><a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/user-mode-and-kernel-mode" target="_blank" rel="noreferrer">Microsoft User Mode and Kernel Mode</a></td>
+                <td>Privilege separation and failure-impact background.</td>
+                <td>Windows architecture documentation does not verify Vanguard's private implementation.</td>
+              </tr>
+              <tr>
+                <td><a href="https://csrc.nist.gov/glossary/term/rootkit" target="_blank" rel="noreferrer">NIST rootkit glossary</a></td>
+                <td>Terminology used to avoid classifying software from privilege alone.</td>
+                <td>A glossary definition is not a product assessment.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="limitations-grid">
+          <div><strong>No live observation</strong><span>The public project performs no Windows or Vanguard measurement and makes no claim about a specific device.</span></div>
+          <div><strong>No security testing</strong><span>No reverse engineering, bypass attempt, memory inspection, traffic interception, or modification of Vanguard files.</span></div>
+          <div><strong>No authenticity claim</strong><span>A matching SHA-256 digest only means the compared bytes match the selected baseline.</span></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Independent educational research software</span>
+      <span>Public evidence · local processing · bounded claims</span>
+    </footer>
+
+    <script src="logic.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

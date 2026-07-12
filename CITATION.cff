@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software or its research method, cite this repository."
+title: "Vanguard Trust Lab"
+type: software
+authors:
+  - name: "Vanguard Trust Lab Contributors"
+abstract: >-
+  An evidence-bounded study of Riot Vanguard's public host-level trust model,
+  accompanied by a dependency-free browser demonstrator for privilege
+  boundaries, platform-posture concepts, and local SHA-256 comparison.
+version: 1.0.0
+date-released: 2026-07-12
+license: MIT
+repository-code: "https://github.com/Alierkn/vanguard-trust-lab"
+url: "https://github.com/Alierkn/vanguard-trust-lab"
+keywords:
+  - system security
+  - host integrity
+  - kernel privilege
+  - runtime attestation
+  - SHA-256
+  - research software

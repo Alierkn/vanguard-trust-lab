@@ -1,0 +1,25 @@
+name: Documentation improvement
+description: Improve clarity, accessibility, reproducibility, or navigation.
+title: "docs: "
+labels: ["documentation"]
+body:
+  - type: input
+    id: location
+    attributes:
+      label: File or section
+      placeholder: docs/reproducibility.md - Browser protocol
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Explain what is unclear, inaccessible, outdated, or difficult to reproduce.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed improvement
+    validations:
+      required: true

@@ -1,0 +1,18 @@
+.DS_Store
+._*
+.idea/
+.vscode/
+node_modules/
+coverage/
+dist/
+tmp/
+work/
+*.log
+*.inspect.ndjson
+*.tmp
+~$*.docx
+~$*.pptx
+
+# Generated release files are attached to tagged releases, not committed.
+release-assets/
+CHECKSUMS.sha256

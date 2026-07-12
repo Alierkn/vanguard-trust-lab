@@ -1,0 +1,40 @@
+{
+  "name": "vanguard-trust-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Public research software for exploring privilege, host trust, and SHA-256 integrity boundaries.",
+  "type": "commonjs",
+  "license": "MIT",
+  "author": {
+    "name": "Vanguard Trust Lab Contributors"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alierkn/vanguard-trust-lab.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Alierkn/vanguard-trust-lab/issues"
+  },
+  "engines": {
+    "node": ">=22 <27",
+    "npm": ">=10"
+  },
+  "packageManager": "npm@11.6.2",
+  "scripts": {
+    "serve": "node scripts/serve.mjs",
+    "lint": "node --check app/app.js && node --check app/logic.js && node --check scripts/serve.mjs && node --check scripts/verify.mjs && node --check scripts/check-links.mjs && node --check scripts/generate-checksums.mjs",
+    "test": "node --test tests/unit/*.test.cjs tests/repository/*.test.mjs",
+    "verify": "node scripts/verify.mjs",
+    "check:links": "node scripts/check-links.mjs",
+    "checksums": "node scripts/generate-checksums.mjs",
+    "ci": "npm run lint && npm test && npm run verify && npm run check:links"
+  },
+  "keywords": [
+    "system-security",
+    "host-integrity",
+    "kernel-security",
+    "attestation",
+    "sha-256",
+    "research-software"
+  ]
+}

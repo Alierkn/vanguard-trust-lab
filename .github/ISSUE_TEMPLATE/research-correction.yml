@@ -1,0 +1,56 @@
+name: Research correction
+description: Propose a source-backed correction to a material claim.
+title: "research: "
+labels: ["research", "needs-evidence"]
+body:
+  - type: input
+    id: claim
+    attributes:
+      label: Claim identifier
+      description: Use an ID from research/claims.csv, or state NEW.
+      placeholder: C-005
+    validations:
+      required: true
+  - type: dropdown
+    id: class
+    attributes:
+      label: Evidence class
+      options:
+        - Riot statement
+        - Microsoft platform mechanism
+        - Project inference
+        - Demonstrator result
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current wording
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed wording
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Primary source URL or registered source ID
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Evidence and rationale
+      description: Explain exactly what the source establishes and what remains uncertain.
+    validations:
+      required: true
+  - type: checkboxes
+    id: copyright
+    attributes:
+      label: Source handling
+      options:
+        - label: I have not attached or reproduced a copyrighted or private source copy.
+          required: true
