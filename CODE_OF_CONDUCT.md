@@ -6,4 +6,4 @@ Constructive behavior includes stating uncertainty, correcting mistakes openly, 
 
 Harassment, discriminatory language, disclosure of private information, promotion of cheating or bypass activity, and unnecessarily operational exploit content are not acceptable.
 
-Report conduct concerns through a private GitHub channel available to the repository owner. Do not use a public issue for sensitive personal information.
+Use GitHub's platform-level **Report abuse** flow for sensitive harassment, threats, privacy violations, or other conduct covered by GitHub policy. For project moderation that can be described without personal or sensitive information, open a minimal repository issue. Do not post sensitive personal information publicly; this repository does not claim a separate private intake channel.

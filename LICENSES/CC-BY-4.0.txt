@@ -1,6 +1,6 @@
 Creative Commons Attribution 4.0 International (CC BY 4.0)
 
-Copyright (c) 2026 Vanguard Trust Lab Contributors
+Copyright (c) 2026 Vanguard Host Trust Contributors
 
 Original research prose, documentation, and diagrams in this repository may be shared and adapted for any purpose, provided appropriate credit is given, a link to the license is supplied, and changes are indicated.
 

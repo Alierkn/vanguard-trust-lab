@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const screenshots = [
+  "app/social-preview.png",
   "assets/screenshots/trust-lab-overview.png",
   "assets/screenshots/integrity-mismatch.png",
 ];

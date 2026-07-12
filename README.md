@@ -9,12 +9,14 @@ This public project examines how Riot Vanguard seeks host-level game integrity a
 [![GitHub release](https://img.shields.io/github/v/release/Alierkn/vanguard-trust-lab?display_name=tag&sort=semver)](https://github.com/Alierkn/vanguard-trust-lab/releases)
 [![License: MIT + CC BY 4.0](https://img.shields.io/badge/license-MIT%20%2B%20CC%20BY%204.0-071B3D)](LICENSE.md)
 
-| Project status | Public dossier complete — v1.1.0 |
+| Project status | Maintained public dossier — v1.1.1 |
 |---|---|
 | Evidence snapshot | 12 July 2026 |
 | Evidence base | 15 official public sources · 18 bounded claims |
 | Canonical report | [`project/report.md`](project/report.md) |
 | Live demonstrator | [Interactive Security Demonstrator](https://alierkn.github.io/vanguard-trust-lab/) |
+
+**Start here:** [Report](project/report.md) · [Demonstrator](https://alierkn.github.io/vanguard-trust-lab/) · [Evidence](research/references.md) · [Reproduce](docs/reproducibility.md) · [Release](https://github.com/Alierkn/vanguard-trust-lab/releases/latest)
 
 ## Research question and public contribution
 
@@ -91,7 +93,7 @@ Every material technical conclusion belongs to one of four classes:
 | Project inference | Present a conditional interpretation | Must not be promoted to certainty |
 | Demonstrator result | Report behavior reproduced by tests | Applies to this repository, not Vanguard |
 
-Claims use `[C-###]` identifiers and public sources use `[S-*]` identifiers. The 12 July 2026 snapshot contains exactly 15 sources and 18 claims. CI checks identifier registration, source/claim relationships, report structure, manifest consistency, and wording boundaries. See [Methodology](research/methodology.md), [Evidence Snapshot](research/evidence-freeze.md), and [Limitations](research/limitations.md).
+Claims use `[C-###]` identifiers and public sources use `[S-*]` identifiers. The 12 July 2026 snapshot contains exactly 15 sources and 18 claims. CI checks identifier registration, source/claim relationships, report structure, manifest consistency, and wording boundaries. See the [human-readable references](research/references.md), [methodology](research/methodology.md), [evidence snapshot](research/evidence-freeze.md), and [limitations](research/limitations.md).
 
 ## Interactive Security Demonstrator
 
@@ -108,8 +110,8 @@ The app has no backend, analytics, account system, upload endpoint, runtime pack
 
 ### Deterministic integrity result
 
-- Sample A: `6af1022470965f08d997eb048309a6b95b898289e19f224df7a3e91604ff004b`
-- Modified Sample B: `7240f01f4de745ed075feea3edd5d02c8632979050f31126faf3c5cfd44c10a6`
+- Sample A: `98e1521a889fa6ef3e88b60a125bd569f0b6a9c228a4b492e902ef6b2c8e7c9a`
+- Modified Sample B: `677197ccc10c1da9241d73ec32413cc125e0fd89616ca6c4637247b85f7e5588`
 - Sample A baseline versus Modified Sample B: `MISMATCH`
 
 That result establishes only that the bytes differ. It does not establish authenticity, safety, authorization, malware absence, host posture, or Vanguard effectiveness. [C-012] [C-016] [C-017]
@@ -156,6 +158,8 @@ This repository performs no live Windows or Vanguard measurement and makes no st
 The public project contains no student record, institutional mailbox, private source, restricted portal reference, device capture, player telemetry, credential, or player/account data. Git hosting necessarily exposes the repository owner's handle and identities attached to public commits; those platform identities are not presented as institutional project data. Repository checks scan the current tree, deliverable paths, reachable Git history, and release archives. Static hosting uses a restrictive Content Security Policy; GitHub workflows use least-privilege permissions and immutable full-length action pins.
 
 Read [Ethics and Scope](research/ethics-and-scope.md), [Security Architecture](docs/security-architecture.md), [Security Policy](SECURITY.md), and [Disclaimer](DISCLAIMER.md).
+
+Community and maintenance information: [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Support](SUPPORT.md) · [Code of Conduct](CODE_OF_CONDUCT.md)
 
 ## Citation, licensing, and trademarks
 

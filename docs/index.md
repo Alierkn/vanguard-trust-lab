@@ -24,6 +24,7 @@
 - [Ethics and scope](../research/ethics-and-scope.md)
 - [Public evidence snapshot](../research/evidence-freeze.md)
 - [Source register](../research/sources.csv)
+- [Human-readable references](../research/references.md)
 - [Claim register](../research/claims.csv)
 
 ## Security and operations
@@ -31,7 +32,6 @@
 - [Security architecture](security-architecture.md)
 - [Repository settings](repository-settings.md)
 - [2026/2027 maintenance calendar](maintenance-calendar.md)
-- [Security hardening review](hardening/hardening.md)
 - [Governance](../GOVERNANCE.md)
 - [Contributing](../CONTRIBUTING.md)
 - [Security policy](../SECURITY.md)

@@ -14,6 +14,13 @@
 - Reposition the browser artifact as an Interactive Security Demonstrator.
 - Validate report traceability, public metadata, Git history, archive contents, screenshot metadata, and release reproducibility.
 
+## v1.1.1 — Public Surface Hygiene
+
+- Remove internal publication-working material from the current public tree.
+- Canonicalize visible project identity, source navigation, licensing, and release documentation.
+- Strengthen fail-closed repository, history, link, archive, and static-host validation.
+- Refine demonstrator accessibility and public sharing metadata without changing its scope.
+
 ## v1.2.0 — Threat/control explorer
 
 - Link public threat classes to controls, assumptions, and residual risk.

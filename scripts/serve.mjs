@@ -1,10 +1,11 @@
-import { createReadStream, statSync } from "node:fs";
+import { createReadStream, realpathSync, statSync } from "node:fs";
 import { createServer } from "node:http";
-import { extname, join, normalize, resolve } from "node:path";
+import { extname, join, normalize, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repositoryRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const publicRoot = join(repositoryRoot, "app");
+const publicRoot = resolve(process.env.PUBLIC_ROOT || join(repositoryRoot, "app"));
+const canonicalPublicRoot = realpathSync(publicRoot);
 const host = process.env.HOST || "127.0.0.1";
 const port = Number(process.env.PORT || 8000);
 
@@ -20,10 +21,25 @@ const contentTypes = new Map([
 ]);
 
 function safePath(requestUrl) {
-  const pathname = decodeURIComponent(new URL(requestUrl, `http://${host}:${port}`).pathname);
+  let pathname;
+  try {
+    pathname = decodeURIComponent(new URL(requestUrl, `http://${host}:${port}`).pathname);
+  } catch {
+    return { status: 400 };
+  }
   const relative = pathname === "/" ? "index.html" : pathname.replace(/^\/+/, "");
   const candidate = resolve(publicRoot, normalize(relative));
-  return candidate.startsWith(`${publicRoot}/`) || candidate === publicRoot ? candidate : null;
+  if (!(candidate === publicRoot || candidate.startsWith(`${publicRoot}${sep}`))) return { status: 403 };
+  try {
+    let filePath = candidate;
+    if (statSync(filePath).isDirectory()) filePath = join(filePath, "index.html");
+    const canonicalPath = realpathSync(filePath);
+    if (!(canonicalPath === canonicalPublicRoot || canonicalPath.startsWith(`${canonicalPublicRoot}${sep}`))) return { status: 403 };
+    if (!statSync(canonicalPath).isFile()) return { status: 404 };
+    return { path: canonicalPath, status: 200 };
+  } catch {
+    return { status: 404 };
+  }
 }
 
 const server = createServer((request, response) => {
@@ -33,22 +49,14 @@ const server = createServer((request, response) => {
     return;
   }
 
-  const candidate = safePath(request.url);
-  if (!candidate) {
-    response.writeHead(403, { "Content-Type": "text/plain; charset=utf-8" });
-    response.end("Forbidden\n");
+  const result = safePath(request.url);
+  if (result.status !== 200) {
+    const messages = new Map([[400, "Bad request\n"], [403, "Forbidden\n"], [404, "Not found\n"]]);
+    response.writeHead(result.status, { "Content-Type": "text/plain; charset=utf-8" });
+    response.end(messages.get(result.status));
     return;
   }
-
-  let filePath = candidate;
-  try {
-    if (statSync(filePath).isDirectory()) filePath = join(filePath, "index.html");
-    if (!statSync(filePath).isFile()) throw new Error("Not a file");
-  } catch {
-    response.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
-    response.end("Not found\n");
-    return;
-  }
+  const filePath = result.path;
 
   response.writeHead(200, {
     "Cache-Control": "no-store",
@@ -66,6 +74,8 @@ const server = createServer((request, response) => {
 });
 
 server.listen(port, host, () => {
-  console.log(`Vanguard Host Trust demonstrator: http://${host}:${port}`);
+  const address = server.address();
+  const listeningPort = typeof address === "object" && address ? address.port : port;
+  console.log(`Vanguard Host Trust demonstrator: http://${host}:${listeningPort}`);
   console.log("Press Ctrl+C to stop.");
 });

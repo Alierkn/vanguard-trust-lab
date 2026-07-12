@@ -73,8 +73,9 @@ The pinned release workflow performs the following sequence on the tagged commit
 After publication, verify the downloaded assets independently:
 
 ```sh
+VERSION=$(cat VERSION)
 sha256sum -c CHECKSUMS.sha256
-gh attestation verify vanguard-trust-lab-v1.1.0.zip --repo Alierkn/vanguard-trust-lab
+gh attestation verify "vanguard-trust-lab-v${VERSION}.zip" --repo Alierkn/vanguard-trust-lab
 gh attestation verify CHECKSUMS.sha256 --repo Alierkn/vanguard-trust-lab
 ```
 
