@@ -3,7 +3,7 @@
 - Target: Vanguard Trust Lab public distribution candidate
 - Input mode: ordinary source snapshot
 - Artifact count: 68 public-candidate files outside this analysis directory
-- Collection SHA-256: `3d2b5f46ce083fb8ba6bdb989208fa022825ac6768c310268947c840a1e98360`
+- Collection SHA-256: `d6a84575450f3c4ac04bb46efa29f6fd62f21946f3359850c5b11dbc0f0d57ed`
 - Source revision: unavailable at analysis start; the public tree had no Git metadata
 - Source drift: none at the final pre-Git snapshot
 

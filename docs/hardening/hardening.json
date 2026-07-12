@@ -5,7 +5,7 @@
   "sourceEvidence": {
     "kind": "source_snapshot",
     "label": "Vanguard Trust Lab public distribution candidate",
-    "collectionSha256": "3d2b5f46ce083fb8ba6bdb989208fa022825ac6768c310268947c840a1e98360",
+    "collectionSha256": "d6a84575450f3c4ac04bb46efa29f6fd62f21946f3359850c5b11dbc0f0d57ed",
     "artifactCount": 68,
     "sourceDrift": "none"
   },

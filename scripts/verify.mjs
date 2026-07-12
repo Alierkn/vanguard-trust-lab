@@ -181,6 +181,11 @@ for (const file of readdirSync(workflowDirectory).filter((name) => name.endsWith
   }
 }
 
+const pagesWorkflow = readFileSync(join(workflowDirectory, "pages.yml"), "utf8");
+if (!/include-hidden-files:\s*true/.test(pagesWorkflow)) {
+  fail("Pages workflow would omit .well-known/security.txt and .nojekyll");
+}
+
 JSON.parse(readFileSync(join(root, "docs/hardening/hardening.json"), "utf8"));
 
 if (!process.exitCode) {
