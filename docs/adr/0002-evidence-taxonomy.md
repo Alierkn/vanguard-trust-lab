@@ -5,7 +5,7 @@
 
 ## Context
 
-First-party product statements, operating-system documentation, analytical inference, and reproduced Lab behavior have different evidential strength. Mixing them would overstate the result.
+First-party product statements, operating-system documentation, analytical inference, and reproduced demonstrator behavior have different evidential strength. Mixing them would overstate the result.
 
 ## Decision
 

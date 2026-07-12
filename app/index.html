@@ -10,29 +10,32 @@
     />
     <meta
       name="description"
-      content="An offline educational model of Riot Vanguard's privilege boundary, public On-Demand requirement groups, and file integrity with SHA-256."
+      content="The Vanguard Host Trust Interactive Security Demonstrator: an offline model of privilege boundaries, public posture requirements, and SHA-256 integrity."
     />
-    <title>Vanguard Trust Lab</title>
+    <title>Vanguard Host Trust — Interactive Security Demonstrator</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="app-header">
-      <a class="brand" href="#trust-model" aria-label="Vanguard Trust Lab home">Vanguard Trust Lab</a>
+      <a class="brand" href="#system-model" aria-label="Vanguard Host Trust demonstrator home">
+        <strong>Vanguard Host Trust</strong>
+        <small>Interactive Security Demonstrator</small>
+      </a>
       <nav class="top-nav" aria-label="Primary navigation">
-        <a class="nav-link is-active" href="#trust-model">Trust Model</a>
-        <a class="nav-link" href="#integrity-lab">Integrity Lab</a>
-        <a class="nav-link" href="#lab-purpose">Why this Lab</a>
-        <a class="nav-link" href="#sources">Sources</a>
+        <a class="nav-link is-active" href="#system-model" aria-current="location">System Model</a>
+        <a class="nav-link" href="#posture-model">Posture Model</a>
+        <a class="nav-link" href="#integrity-demonstrator">Integrity Demonstrator</a>
+        <a class="nav-link" href="#evidence">Evidence</a>
       </nav>
     </header>
 
     <main>
-      <section id="trust-model" class="workspace section-anchor" aria-labelledby="architecture-title">
+      <section id="system-model" class="workspace section-anchor" aria-labelledby="architecture-title">
         <article class="panel architecture-panel">
           <div class="panel-heading">
             <div>
-              <h1 id="architecture-title">System Architecture (Vanguard)</h1>
-              <p>A simplified view of components and privilege levels.</p>
+              <h1 id="architecture-title">System Model</h1>
+              <p>Interactive Security Demonstrator · simplified public components and privilege levels.</p>
             </div>
           </div>
 
@@ -121,11 +124,11 @@
           </p>
         </article>
 
-        <article class="panel posture-panel" aria-labelledby="posture-title">
+        <article id="posture-model" class="panel posture-panel section-anchor" aria-labelledby="posture-title">
           <div class="panel-heading">
             <div>
-              <h2 id="posture-title">Security Posture (On-Demand Requirements)</h2>
-              <p>Manually describe a hypothetical Windows PC.</p>
+              <h2 id="posture-title">Posture Model</h2>
+              <p>Manually combine the five public On-Demand groups. This page has not inspected a device.</p>
             </div>
             <button class="text-button" id="resetPosture" type="button">Reset</button>
           </div>
@@ -199,10 +202,10 @@
         </article>
       </section>
 
-      <section id="integrity-lab" class="panel integrity-panel section-anchor" aria-labelledby="integrity-title">
+      <section id="integrity-demonstrator" class="panel integrity-panel section-anchor" aria-labelledby="integrity-title">
         <div class="panel-heading">
           <div>
-            <h2 id="integrity-title">File Integrity Lab</h2>
+            <h2 id="integrity-title">Integrity Demonstrator</h2>
             <p>Compare harmless local files with an in-memory SHA-256 baseline.</p>
           </div>
         </div>
@@ -260,24 +263,24 @@
         <p><strong>Educational model based on public documentation.</strong> Not a Vanguard audit or security assessment. Checklist values are entered manually, and hashing never proves that a baseline file is safe or authentic.</p>
       </aside>
 
-      <section id="lab-purpose" class="concept-section section-anchor" aria-labelledby="lab-purpose-title">
+      <section id="demonstrator-role" class="concept-section section-anchor" aria-labelledby="demonstrator-role-title">
         <div>
-          <h2 id="lab-purpose-title">Why this Lab exists</h2>
-          <p>It converts bounded research claims into a safe, reproducible experiment on any modern desktop browser.</p>
+          <h2 id="demonstrator-role-title">Role of the Demonstrator</h2>
+          <p>It is a supporting research artifact—not the project itself, a Vanguard audit, Pre-Check, or substitute for live Windows measurement.</p>
         </div>
         <dl class="concept-list">
           <div><dt>Make boundaries visible</dt><dd>The diagram exposes where authority and failure impact change across user and kernel modes.</dd></div>
           <div><dt>Test a claim</dt><dd>Deterministic samples make the difference between byte integrity and authenticity directly observable.</dd></div>
-          <div><dt>Stay ethically bounded</dt><dd>The Lab teaches the model without inspecting proprietary software, devices, accounts, memory, or traffic.</dd></div>
+          <div><dt>Stay ethically bounded</dt><dd>The demonstrator teaches the model without inspecting proprietary software, devices, accounts, memory, or traffic.</dd></div>
           <div><dt>Remain cross-platform</dt><dd>Static web standards make the same exercise reproducible on macOS, Windows, and Linux.</dd></div>
         </dl>
       </section>
 
-      <section id="sources" class="sources-section section-anchor" aria-labelledby="sources-title">
+      <section id="evidence" class="sources-section section-anchor" aria-labelledby="evidence-title">
         <div class="sources-heading">
           <div>
-            <h2 id="sources-title">Sources and limitations</h2>
-            <p>Product statements, platform mechanisms, project inference, and Lab results stay separate.</p>
+            <h2 id="evidence-title">Evidence and Limitations</h2>
+            <p>Product statements, platform mechanisms, project inference, and demonstrator results stay separate.</p>
           </div>
         </div>
         <div class="source-table-wrapper">
@@ -326,7 +329,7 @@
     </main>
 
     <footer>
-      <span>Independent educational research software</span>
+      <span>Vanguard Host Trust · Interactive Security Demonstrator</span>
       <span>Public evidence · local processing · bounded claims</span>
     </footer>
 

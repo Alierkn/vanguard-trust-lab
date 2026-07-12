@@ -20,7 +20,7 @@ A reasoned interpretation built from the first two classes and primary security 
 
 ### 4. Demonstrator result
 
-Behavior reproduced in the included static browser Lab, such as a fixed SHA-256 digest or `MATCH`/`MISMATCH` transition. It is evidence about the Lab only.
+Behavior reproduced in the included Interactive Security Demonstrator, such as a fixed SHA-256 digest or `MATCH`/`MISMATCH` transition. It is evidence about the demonstrator only.
 
 ## Source selection
 
@@ -50,7 +50,7 @@ The claim base uses official Riot publications, Microsoft platform documentation
 - Vendor claims are attributed.
 - Platform mechanisms use official documentation.
 - Project inference is labeled and conditional.
-- Lab claims are restricted to tested behavior.
+- Demonstrator claims are restricted to tested behavior.
 - Fixed digests are verified independently with Node's cryptographic library.
 - Public source access dates and an evidence snapshot are recorded.
 - CI checks source/claim relationships, runtime dependencies, release boundaries, and public metadata.

@@ -24,7 +24,7 @@
 
 ## Data handling
 
-The app has no backend and uploads nothing. File contents remain inside the browser context. The selected baseline exists only in memory and is cleared when the page is refreshed. The repository contains no personal dataset, player telemetry, account identifier, or captured network data.
+The app has no backend and uploads nothing. File contents remain inside the browser context. The selected baseline exists only in memory and is cleared when the page is refreshed. The repository contains no personal dataset, student record, player telemetry, player/account data, or captured network data. The hosting platform still exposes its ordinary repository-owner and public-contributor identities.
 
 ## Human participants
 

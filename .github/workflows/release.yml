@@ -22,7 +22,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Configure Node.js
@@ -52,12 +52,39 @@ jobs:
           git archive --format=zip --prefix="vanguard-trust-lab-${VERSION}/" --output="dist/${ARCHIVE}" HEAD
           (cd dist && sha256sum "${ARCHIVE}" > CHECKSUMS.sha256 && sha256sum -c CHECKSUMS.sha256)
 
+      - name: Extract and revalidate release bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="${GITHUB_REF_NAME:-manual-${GITHUB_SHA::12}}"
+          ARCHIVE="vanguard-trust-lab-${VERSION}.zip"
+          mkdir -p release-check
+          unzip -q "dist/${ARCHIVE}" -d release-check
+          SOURCE_DIR="$(find release-check -mindepth 1 -maxdepth 1 -type d -print -quit)"
+          test -n "${SOURCE_DIR}"
+          (
+            cd "${SOURCE_DIR}"
+            npm ci --ignore-scripts
+            npm run ci
+          )
+          (cd dist && sha256sum -c CHECKSUMS.sha256)
+          test "$(find dist -maxdepth 1 -type f | wc -l | tr -d ' ')" -eq 2
+
       - name: Attest source bundle and checksum
         uses: actions/attest@a1948c3f048ba23858d222213b7c278aabede763 # v4.1.1
         with:
           subject-path: |
             dist/*.zip
             dist/CHECKSUMS.sha256
+
+      - name: Verify generated provenance
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh attestation verify dist/*.zip --repo "${GITHUB_REPOSITORY}"
+          gh attestation verify dist/CHECKSUMS.sha256 --repo "${GITHUB_REPOSITORY}"
 
       - name: Upload release candidate
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

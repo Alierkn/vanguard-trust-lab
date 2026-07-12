@@ -1,4 +1,4 @@
-# ADR-0003: Keep the browser Lab dependency-free
+# ADR-0003: Keep the Interactive Security Demonstrator dependency-free
 
 - Status: Accepted
 - Date: 12 July 2026
@@ -13,7 +13,7 @@ Use static HTML, CSS, and JavaScript; the browser Web Cryptography API; an in-me
 
 ## Consequences
 
-- The Lab runs on macOS, Windows, and Linux or through GitHub Pages.
+- The demonstrator runs on macOS, Windows, and Linux or through GitHub Pages.
 - Runtime supply-chain and network exposure remain minimal.
 - Tests stay deterministic and fast.
-- The Lab cannot and must not implement live attestation, host inspection, or Vanguard integration.
+- The demonstrator cannot and must not implement live attestation, host inspection, or Vanguard integration.

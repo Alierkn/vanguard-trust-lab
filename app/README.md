@@ -1,12 +1,12 @@
-# Browser Lab
+# Interactive Security Demonstrator
 
-This dependency-free demonstrator makes three security boundaries observable:
+This dependency-free browser artifact supports the **Vanguard Host Trust** public research dossier. It makes three bounded security concepts observable:
 
-1. a simplified user-mode/kernel-mode component model;
-2. a manual checklist of five public Vanguard On-Demand requirement groups;
+1. a simplified user-mode/kernel-mode system model;
+2. a manual posture model combining five public Vanguard On-Demand requirement groups; and
 3. a local SHA-256 comparison against an in-memory baseline.
 
-It is not an official compatibility checker, device scanner, attestation client, anti-cheat, malware detector, or Vanguard audit.
+It is not the project itself, an official compatibility checker, device scanner, attestation client, anti-cheat, malware detector, Vanguard audit, Pre-Check, or substitute for live Windows measurement.
 
 ## Run on macOS, Windows, or Linux
 
@@ -17,7 +17,7 @@ npm ci --ignore-scripts
 npm run serve
 ```
 
-Open `http://127.0.0.1:8000`. A current Safari, Chrome, Firefox, or Edge browser is sufficient; the Lab itself has no package dependency.
+Open `http://127.0.0.1:8000`. A current Safari, Chrome, Firefox, or Edge browser is sufficient; the static demonstrator itself has no package dependency.
 
 ## Reproduce the integrity result
 
@@ -37,4 +37,4 @@ A match establishes byte equality with the selected baseline. It does not establ
 - no OS, firmware, game, Vanguard, process, memory, or network inspection;
 - restrictive Content Security Policy and a 50 MiB interface limit.
 
-The Lab is cross-platform by design. Its role is to provide a safe and reproducible research artifact, not to compensate for any particular development operating system.
+The demonstrator is cross-platform by design. Its role is methodological: it provides a safe, reproducible experiment layer for the research without depending on a particular development operating system.

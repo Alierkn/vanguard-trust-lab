@@ -170,14 +170,14 @@
   loadSampleA.addEventListener("click", () => {
     const sample = new File([
       "Vanguard Trust Lab educational sample\nVersion: 1\nIntegrity means detecting unauthorized change.\n",
-    ], "trust-lab-sample.txt", { type: "text/plain" });
+    ], "vanguard-host-trust-sample.txt", { type: "text/plain" });
     handleFile(sample);
   });
 
   loadSampleB.addEventListener("click", () => {
     const sample = new File([
       "Vanguard Trust Lab educational sample\nVersion: 2\nIntegrity means detecting unauthorized change.\n",
-    ], "trust-lab-sample-modified.txt", { type: "text/plain" });
+    ], "vanguard-host-trust-sample-modified.txt", { type: "text/plain" });
     handleFile(sample);
   });
 
@@ -242,8 +242,12 @@
 
   document.querySelectorAll(".nav-link").forEach((link) => {
     link.addEventListener("click", () => {
-      document.querySelectorAll(".nav-link").forEach((item) => item.classList.remove("is-active"));
+      document.querySelectorAll(".nav-link").forEach((item) => {
+        item.classList.remove("is-active");
+        item.removeAttribute("aria-current");
+      });
       link.classList.add("is-active");
+      link.setAttribute("aria-current", "location");
     });
   });
 

@@ -1,42 +1,124 @@
-# Vanguard Trust Lab
+# Vanguard Host Trust: Integrity, Privilege, and Digital Trust
 
-An independent, evidence-bounded study of Riot Vanguard's public host-trust model, paired with a small cross-platform security lab.
+*An Evidence-Bounded System Security Research Project*
+
+This public project examines how Riot Vanguard seeks host-level game integrity and which security, privacy, compatibility, and availability trade-offs follow from privileged enforcement and stronger platform requirements. It combines a traceable research dossier with a small Interactive Security Demonstrator; it is not a product audit or a measurement of a live device.
 
 [![CI](https://github.com/Alierkn/vanguard-trust-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Alierkn/vanguard-trust-lab/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/Alierkn/vanguard-trust-lab/actions/workflows/codeql.yml/badge.svg)](https://github.com/Alierkn/vanguard-trust-lab/actions/workflows/codeql.yml)
 [![GitHub release](https://img.shields.io/github/v/release/Alierkn/vanguard-trust-lab?display_name=tag&sort=semver)](https://github.com/Alierkn/vanguard-trust-lab/releases)
 [![License: MIT + CC BY 4.0](https://img.shields.io/badge/license-MIT%20%2B%20CC%20BY%204.0-071B3D)](LICENSE.md)
 
-![Vanguard Trust Lab interface showing a public trust model and local integrity workflow](assets/screenshots/trust-lab-overview.png)
+| Project status | Public dossier complete — v1.1.0 |
+|---|---|
+| Evidence snapshot | 12 July 2026 |
+| Evidence base | 15 official public sources · 18 bounded claims |
+| Canonical report | [`project/report.md`](project/report.md) |
+| Live demonstrator | [Interactive Security Demonstrator](https://alierkn.github.io/vanguard-trust-lab/) |
 
-## Why the lab exists
-
-The Lab is not a workaround for developing on macOS. It is the project's reproducible experiment layer and runs in a modern browser on macOS, Windows, or Linux.
-
-It turns three abstract security questions into observable behavior:
-
-1. **Where is the trust boundary?** A simplified diagram makes the user-mode/kernel-mode privilege transition visible.
-2. **How is a posture decision assembled?** A manual checklist shows how several public platform requirements combine without pretending to inspect the host.
-3. **What does integrity prove?** A local SHA-256 experiment distinguishes byte equality from authenticity, safety, and authorization.
-
-This gives readers something they can run, challenge, and reproduce instead of relying only on prose. Even on a Windows computer with Vanguard installed, this public Lab would intentionally avoid driver inspection, game-memory access, traffic capture, reverse engineering, or private protocol interaction. Its value is methodological: it demonstrates bounded claims safely.
-
-## Research question
+## Research question and public contribution
 
 > How does Riot Vanguard seek host-level game integrity, and what security and availability trade-offs follow from privileged enforcement and stronger platform requirements?
 
-The analysis separates four evidence classes:
+The project contributes five linked layers:
 
-- **Riot statement** — a first-party product or architecture description;
-- **Microsoft platform mechanism** — documented Windows behavior or requirements;
-- **project inference** — a conditional interpretation of the public evidence;
-- **demonstrator result** — behavior reproduced by this repository's tests or browser app.
+1. a frozen register of public Riot, Microsoft, NIST, and W3C evidence;
+2. a simplified system model, threat model, and explicit trust boundaries;
+3. a comparative analysis of system-start and optional On-Demand operation;
+4. a dependency-free demonstrator for posture reasoning and byte integrity; and
+5. machine-verifiable traceability, privacy, repository-security, and reproducibility controls.
 
-Vendor statements are not presented as independent verification, and Lab results are never presented as a Vanguard audit.
+The report is the principal research output. The browser demonstrator supports selected concepts without pretending to reproduce Vanguard, inspect Windows, or decide device eligibility.
 
-## Try it locally
+## Work packages and deliverables
 
-Requirements: Node.js 24 LTS and npm 11 for the maintained development environment.
+| Work package | Question answered | Public deliverables | Status |
+|---|---|---|---|
+| WP1 — Evidence Governance | What can the public evidence actually support? | [Sources](research/sources.csv), [claims](research/claims.csv), [method](research/methodology.md) | Complete |
+| WP2 — System and Threat Modeling | Which assets, components, boundaries, threats, and controls matter? | [Architecture](research/architecture.md), [threat model](research/threat-model.md) | Complete |
+| WP3 — Comparative Security Analysis | How do system-start and On-Demand redistribute trust and risk? | [Canonical report](project/report.md) | Complete |
+| WP4 — Interactive Demonstrator | Which concepts can be reproduced safely? | [Static app](app/README.md), [demo guide](docs/demo-guide.md), tests | Complete |
+| WP5 — Validation and Communication | Can the result be checked, presented, and maintained safely? | [Manifest](project/manifest.json), [presentation guide](project/presentation-guide.md), [Turkish summary](project/summary-tr.md) | Complete |
+
+The complete charter and acceptance criteria are in the [Public Project Dossier](project/README.md). `project/manifest.json` is the machine-readable inventory for the version, work packages, deliverables, metrics, and scope exclusions.
+
+## Six evidence-bounded findings
+
+1. **Privilege is both a control and an assurance burden.** Kernel execution can improve potential visibility and resistance against privileged threats, while increasing the impact of defects, incompatibility, or compromise. [C-001] [C-018]
+2. **Integrity, authenticity, and policy acceptance are different.** A hash supports byte equality, a trusted signature supports origin under a trust chain, and a service decision adds policy; none proves complete safety. [C-002] [C-012]
+3. **On-Demand changes where historical trust is obtained.** The public model shifts part of the argument from continuous Vanguard observation toward hardened platform state, signed evidence, freshness, and backend interpretation. [C-005] [C-014]
+4. **Platform mechanisms are complementary and conditional.** Secure Boot, TPM 2.0, VBS/HVCI, IOMMU protection, and runtime attestation cover different concerns and remain subject to platform and policy conditions. [C-007] [C-008] [C-009] [C-010] [C-011]
+5. **Privacy cannot be inferred from privilege or lifetime alone.** Riot describes the user-mode component/platform network relationship, but this project performs no packet or telemetry analysis. [C-015] [C-017]
+6. **Availability is part of system security.** Stronger posture requirements can increase assurance for accepted sessions while excluding legitimate users or exposing compatibility and recovery costs. [C-018]
+
+These are conditional findings, not a categorical “safe,” “unsafe,” “private,” or “complete detection” verdict. Claim wording and prohibited overclaims are recorded in [`research/claims.csv`](research/claims.csv).
+
+## System model and trust boundaries
+
+```mermaid
+flowchart TB
+    subgraph user["User mode"]
+      client["Riot / League client"] --> vgc["Vanguard service — vgc"]
+    end
+    boundary{{"Privilege boundary"}}
+    subgraph kernel["Kernel mode"]
+      vgk["Vanguard driver — vgk"] --> windows["Windows kernel and system resources"]
+    end
+    platform["Vanguard platform / remote policy"]
+    evidence["Windows, firmware, and hardware-supported evidence"]
+    vgc --> boundary --> vgk
+    evidence -. "platform state" .-> vgc
+    vgc -. "high-level evidence and policy relationship" .-> platform
+```
+
+The diagram expresses a simplified teaching model, not a verified packet flow, API sequence, or complete component inventory. Four boundaries structure the analysis:
+
+- **Application boundary:** ordinary client activity versus the security service.
+- **Privilege boundary:** isolated user-mode execution versus system-wide kernel authority and failure impact.
+- **Platform boundary:** local components versus Windows, firmware, and hardware-supported controls.
+- **Network/policy boundary:** local evidence versus remote interpretation and access decisions.
+
+The detailed interpretation is in the [architecture](research/architecture.md), [threat model](research/threat-model.md), and [canonical report](project/report.md).
+
+## Evidence model and traceability
+
+Every material technical conclusion belongs to one of four classes:
+
+| Evidence class | Valid use | Boundary |
+|---|---|---|
+| Riot statement | Describe what Riot publicly states | Not independent implementation or effectiveness verification |
+| Microsoft platform mechanism | Explain documented Windows behavior | Does not reveal Riot's private use or backend policy |
+| Project inference | Present a conditional interpretation | Must not be promoted to certainty |
+| Demonstrator result | Report behavior reproduced by tests | Applies to this repository, not Vanguard |
+
+Claims use `[C-###]` identifiers and public sources use `[S-*]` identifiers. The 12 July 2026 snapshot contains exactly 15 sources and 18 claims. CI checks identifier registration, source/claim relationships, report structure, manifest consistency, and wording boundaries. See [Methodology](research/methodology.md), [Evidence Snapshot](research/evidence-freeze.md), and [Limitations](research/limitations.md).
+
+## Interactive Security Demonstrator
+
+The [live static application](https://alierkn.github.io/vanguard-trust-lab/) turns three bounded ideas into observable behavior:
+
+- **System Model** makes the user-mode/kernel-mode privilege transition visible.
+- **Posture Model** combines five manually entered public requirement groups without reading the host or reproducing Vanguard Pre-Check.
+- **Integrity Demonstrator** compares a local SHA-256 digest with an in-memory baseline.
+- **Evidence** explains what the model can and cannot establish.
+
+![Interactive Security Demonstrator overview](assets/screenshots/trust-lab-overview.png)
+
+The app has no backend, analytics, account system, upload endpoint, runtime package dependency, external font, or remote JavaScript. Its Content Security Policy disables runtime connections. Selected files remain inside the browser context and the baseline is cleared on refresh.
+
+### Deterministic integrity result
+
+- Sample A: `6af1022470965f08d997eb048309a6b95b898289e19f224df7a3e91604ff004b`
+- Modified Sample B: `7240f01f4de745ed075feea3edd5d02c8632979050f31126faf3c5cfd44c10a6`
+- Sample A baseline versus Modified Sample B: `MISMATCH`
+
+That result establishes only that the bytes differ. It does not establish authenticity, safety, authorization, malware absence, host posture, or Vanguard effectiveness. [C-012] [C-016] [C-017]
+
+![Integrity Demonstrator showing the deterministic MISMATCH result](assets/screenshots/integrity-mismatch.png)
+
+## Reproduce the project
+
+The maintained development matrix uses Node.js 22 and 24 with npm 11. The static app itself runs in a current desktop browser on macOS, Windows, or Linux.
 
 ```sh
 npm ci --ignore-scripts
@@ -44,63 +126,39 @@ npm run ci
 npm run serve
 ```
 
-Open `http://127.0.0.1:8000`. The same static application is published through GitHub Pages.
+Open `http://127.0.0.1:8000` for the local demonstrator. `npm run ci` performs syntax checks, deterministic unit and repository tests, evidence and manifest validation, link policy checks, public-metadata scanning, and Git-history release-boundary checks.
 
-The page has no runtime package dependency, analytics, remote JavaScript, external font, account system, backend, or upload endpoint. Selected files are hashed locally through the Web Cryptography API and the baseline is kept only in memory.
-
-## What the Lab does — and does not do
-
-| It does | It does not |
-|---|---|
-| Visualize a public, simplified privilege model | Inspect `vgk`, `vgc`, Windows, firmware, or the current device |
-| Model five documented On-Demand requirement groups through manual input | Reproduce Vanguard Pre-Check or decide device eligibility |
-| Compare local bytes with an in-memory SHA-256 baseline | Prove that a file is authentic, safe, authorized, or malware-free |
-| Provide deterministic samples and tests | Implement anti-cheat detection, attestation, bypasses, or exploits |
-
-## Repository map
-
-| Path | Purpose |
-|---|---|
-| `app/` | Dependency-free browser Lab deployed to GitHub Pages. |
-| `research/` | Question, methodology, threat model, public sources, claims, and limitations. |
-| `tests/` | Unit, repository-integrity, privacy, and security-policy checks. |
-| `docs/` | Reproducibility, decisions, publication security, and maintenance guidance. |
-| `scripts/` | Cross-platform local server, verification, link policy, and checksums. |
-| `.github/` | Least-privilege CI, CodeQL, Pages, release packaging, and Dependabot. |
-
-## Reproduce the fixed result
+For the fixed result only:
 
 ```sh
 npm test
 npm run verify
 ```
 
-Expected SHA-256 values:
+See [Reproducibility](docs/reproducibility.md) and the [Demo Guide](docs/demo-guide.md).
 
-- Sample A: `6af1022470965f08d997eb048309a6b95b898289e19f224df7a3e91604ff004b`
-- Modified Sample B: `7240f01f4de745ed075feea3edd5d02c8632979050f31126faf3c5cfd44c10a6`
+## Repository map
 
-Using Sample A as the baseline and comparing Modified Sample B produces `MISMATCH`. That result establishes only that the bytes differ.
+| Path | Purpose |
+|---|---|
+| `project/` | Canonical report, charter, manifest, presentation guide, and Turkish summary |
+| `research/` | Public sources, bounded claims, method, architecture, threat model, ethics, and limits |
+| `app/` | Dependency-free Interactive Security Demonstrator deployed to GitHub Pages |
+| `tests/` | Deterministic logic, traceability, privacy, and repository-security checks |
+| `docs/` | Reproducibility, decisions, publication security, release, and maintenance guidance |
+| `scripts/` | Cross-platform serving, validation, link policy, history checks, and checksums |
+| `.github/` | Least-privilege CI, CodeQL, Pages, release packaging, and dependency maintenance |
 
-## Public-by-design security
+## Limitations, ethics, and public-release security
 
-- This repository was created with a fresh Git history; restricted authoring files and personal metadata were never imported.
-- The static site has a restrictive Content Security Policy and no remote runtime dependencies.
-- GitHub Actions use least-privilege tokens, immutable full-length commit pins, timeouts, and concurrency limits.
-- CI validates evidence links, claim/source relationships, public-release boundaries, PII patterns, and deterministic behavior.
-- CodeQL, Dependabot, secret scanning, push protection, and private vulnerability reporting complement the repository checks.
-- Releases contain source bundles and checksums only—no private submissions, account data, device captures, or third-party binaries.
+This repository performs no live Windows or Vanguard measurement and makes no statement about a specific installation, account, player, or device. It excludes reverse engineering, binary inspection, bypasses, cheats, exploits, memory manipulation, traffic interception, kernel development, performance benchmarking, and device certification. Product requirements and platform documentation may change after the evidence snapshot.
 
-See [Security Architecture](docs/security-architecture.md), [Security Policy](SECURITY.md), and [Ethics and Scope](research/ethics-and-scope.md).
+The public project contains no student record, institutional mailbox, private source, restricted portal reference, device capture, player telemetry, credential, or player/account data. Git hosting necessarily exposes the repository owner's handle and identities attached to public commits; those platform identities are not presented as institutional project data. Repository checks scan the current tree, deliverable paths, reachable Git history, and release archives. Static hosting uses a restrictive Content Security Policy; GitHub workflows use least-privilege permissions and immutable full-length action pins.
 
-## Evidence and limits
+Read [Ethics and Scope](research/ethics-and-scope.md), [Security Architecture](docs/security-architecture.md), [Security Policy](SECURITY.md), and [Disclaimer](DISCLAIMER.md).
 
-The public source register uses primary material from Riot Games, Microsoft, NIST, and W3C. Product and platform pages can change; access dates and bounded wording are recorded in [`research/sources.csv`](research/sources.csv) and [`research/claims.csv`](research/claims.csv).
+## Citation, licensing, and trademarks
 
-The project contains no live Vanguard measurement and makes no statement about a specific installation, player, account, or computer. See [Limitations](research/limitations.md).
+Use [`CITATION.cff`](CITATION.cff) for the project citation. Software is MIT-licensed. Original prose and diagrams are CC BY 4.0 unless a file states otherwise. See [License](LICENSE.md), [Attribution](assets/ATTRIBUTION.md), and [Notices](NOTICE.md).
 
-## Licensing and trademarks
-
-Software is MIT-licensed. Original prose and diagrams are CC BY 4.0 unless a file states otherwise. Riot Games, League of Legends, Vanguard, Microsoft, Windows, and other names are trademarks of their respective owners.
-
-This independent educational research project is not affiliated with, endorsed by, or sponsored by Riot Games or Microsoft. See [Disclaimer](DISCLAIMER.md) and [Notices](NOTICE.md).
+Riot Games, League of Legends, Vanguard, Microsoft, Windows, and other names are trademarks of their respective owners. This independent educational research project is not affiliated with, endorsed by, or sponsored by Riot Games or Microsoft.
