@@ -67,17 +67,32 @@ a:focus-visible,
 
 .brand {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   min-width: 300px;
   padding-right: 36px;
   color: var(--navy-950);
-  font-size: 23px;
-  font-weight: 760;
-  letter-spacing: -0.025em;
   text-decoration: none;
 }
 
-.top-nav { display: flex; align-items: stretch; gap: 50px; }
+.brand strong {
+  font-size: 21px;
+  font-weight: 760;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.brand small {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 680;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.top-nav { display: flex; min-width: 0; align-items: stretch; gap: 50px; overflow-x: auto; }
 
 .nav-link {
   position: relative;
@@ -88,6 +103,7 @@ a:focus-visible,
   font-size: 15px;
   font-weight: 650;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .nav-link::after {
@@ -649,7 +665,7 @@ footer {
 
 @media (max-width: 720px) {
   .app-header { position: relative; flex-direction: column; min-height: auto; padding: 0 16px; }
-  .brand { min-width: 0; min-height: 58px; padding: 0; font-size: 21px; }
+  .brand { min-width: 0; min-height: 64px; align-items: flex-start; padding: 0; }
   .top-nav { gap: 24px; overflow-x: auto; }
   .nav-link { min-height: 48px; white-space: nowrap; }
   main { width: min(calc(100% - 24px), var(--content-width)); margin-top: 12px; }

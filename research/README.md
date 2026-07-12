@@ -1,6 +1,6 @@
 # Research Package
 
-This directory is the auditable evidence layer behind the browser Lab.
+This directory is the auditable evidence layer behind the canonical report and Interactive Security Demonstrator.
 
 ## Contents
 

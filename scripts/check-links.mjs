@@ -1,5 +1,5 @@
 import { readFileSync, readdirSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -33,22 +33,25 @@ if (new Set(urls).size !== urls.length) {
   console.warn("Source register contains a repeated URL; review whether separate records are necessary.");
 }
 
-const markdownRoots = [root, join(root, "docs"), join(root, "research")];
-const markdownFiles = markdownRoots.flatMap((directory) =>
-  readdirSync(directory, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
-    .map((entry) => join(directory, entry.name)),
-);
+const skippedDirectories = new Set([".git", ".superpowers", "dist", "node_modules", "release-assets", "tmp"]);
+function findMarkdown(directory) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory() && !skippedDirectories.has(entry.name)) return findMarkdown(path);
+    return entry.isFile() && entry.name.endsWith(".md") ? [path] : [];
+  });
+}
 
+const markdownFiles = findMarkdown(root);
 for (const file of markdownFiles) {
   const body = readFileSync(file, "utf8");
   for (const match of body.matchAll(/\]\((https?:\/\/[^)]+)\)/g)) {
     if (!match[1].startsWith("https://")) {
-      console.error(`Non-HTTPS Markdown link in ${file}: ${match[1]}`);
+      console.error(`Non-HTTPS Markdown link in ${relative(root, file)}: ${match[1]}`);
       failed = true;
     }
   }
 }
 
 if (failed) process.exit(1);
-console.log(`Link policy verified: ${urls.length} registered primary-source URLs.`);
+console.log(`Link policy verified across ${markdownFiles.length} Markdown files and ${urls.length} registered primary-source URLs.`);

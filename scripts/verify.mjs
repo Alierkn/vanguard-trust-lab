@@ -1,9 +1,17 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
-import { extname, join, relative, resolve } from "node:path";
+import { extname, join, posix, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { detectForbiddenBinarySignature, forbiddenPublicBinaryExtensions } from "./public-boundaries.mjs";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
-
+const canonicalTitle = "Vanguard Host Trust: Integrity, Privilege, and Digital Trust";
+const requiredProjectFiles = [
+  "project/README.md",
+  "project/report.md",
+  "project/presentation-guide.md",
+  "project/summary-tr.md",
+  "project/manifest.json",
+];
 const requiredFiles = [
   "README.md",
   "CITATION.cff",
@@ -22,6 +30,7 @@ const requiredFiles = [
   "docs/security-architecture.md",
   "docs/hardening/hardening.json",
   "docs/hardening/hardening.md",
+  ...requiredProjectFiles,
 ];
 
 function fail(message) {
@@ -64,11 +73,17 @@ function parseCsv(text) {
   return data.map((cells) => Object.fromEntries(headers.map((header, index) => [header, cells[index] ?? ""])));
 }
 
+const skippedDirectories = new Set([".git", ".superpowers", "dist", "node_modules", "release-assets", "tmp"]);
 function walk(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const path = join(directory, entry.name);
-    return entry.isDirectory() && entry.name !== ".git" ? walk(path) : [path];
+    if (skippedDirectories.has(entry.name)) return [];
+    return entry.isDirectory() ? walk(path) : entry.isFile() ? [path] : [];
   });
+}
+
+function markdownWordCount(text) {
+  return (text.match(/[\p{L}\p{N}][\p{L}\p{N}'’.-]*/gu) ?? []).length;
 }
 
 for (const path of requiredFiles) {
@@ -76,10 +91,27 @@ for (const path of requiredFiles) {
 }
 
 const version = readFileSync(join(root, "VERSION"), "utf8").trim();
-const packageVersion = JSON.parse(readFileSync(join(root, "package.json"), "utf8")).version;
+const packageJson = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
+const packageLock = JSON.parse(readFileSync(join(root, "package-lock.json"), "utf8"));
 const citation = readFileSync(join(root, "CITATION.cff"), "utf8");
-if (version !== packageVersion) fail(`VERSION (${version}) differs from package.json (${packageVersion})`);
+const manifest = JSON.parse(readFileSync(join(root, "project/manifest.json"), "utf8"));
+
+if (version !== packageJson.version) fail(`VERSION (${version}) differs from package.json (${packageJson.version})`);
+if (version !== packageLock.version || version !== packageLock.packages?.[""]?.version) {
+  fail("package-lock.json version differs from VERSION");
+}
 if (!citation.includes(`version: ${version}`)) fail("CITATION.cff version differs from VERSION");
+if (!citation.includes(`title: "${canonicalTitle}"`)) fail("CITATION.cff does not use the canonical project title");
+if (!citation.includes('name: "Vanguard Trust Lab Contributors"')) fail("CITATION.cff does not use the anonymous contributor identity");
+if (manifest.schemaVersion !== "1.0") fail("project manifest schemaVersion must be 1.0");
+if (manifest.projectId !== "vanguard-host-trust") fail("project manifest has an unexpected projectId");
+if (manifest.title !== canonicalTitle) fail("project manifest does not use the canonical title");
+if (manifest.version !== version) fail(`project manifest version (${manifest.version}) differs from VERSION (${version})`);
+if (manifest.status !== "maintained") fail("project manifest status must identify the dossier as maintained");
+if (manifest.evidenceSnapshot !== "2026-07-12") fail("project manifest evidence snapshot is unexpected");
+if (manifest.canonicalReport !== "project/report.md") fail("project manifest canonicalReport is unexpected");
+if (manifest.liveDemonstrator !== "https://alierkn.github.io/vanguard-trust-lab/") fail("project manifest liveDemonstrator is unexpected");
+if (typeof manifest.researchQuestion !== "string" || manifest.researchQuestion.length < 40) fail("project manifest researchQuestion is missing");
 
 const sources = parseCsv(readFileSync(join(root, "research/sources.csv"), "utf8"));
 const claims = parseCsv(readFileSync(join(root, "research/claims.csv"), "utf8"));
@@ -88,7 +120,9 @@ const claimIds = new Set(claims.map(({ claim_id: id }) => id));
 if (sourceIds.size !== sources.length) fail("duplicate source_id in research/sources.csv");
 if (claimIds.size !== claims.length) fail("duplicate claim_id in research/claims.csv");
 if (sources.length !== 15) fail(`expected exactly 15 public sources; found ${sources.length}`);
-if (claims.length < 18) fail(`expected at least 18 registered claims; found ${claims.length}`);
+if (claims.length !== 18) fail(`expected exactly 18 registered claims; found ${claims.length}`);
+if (manifest.metrics?.publicSources !== sources.length) fail("manifest publicSources metric differs from source register");
+if (manifest.metrics?.registeredClaims !== claims.length) fail("manifest registeredClaims metric differs from claim register");
 
 for (const source of sources) {
   if (!source.url.startsWith("https://")) fail(`${source.source_id} is not a public HTTPS source`);
@@ -102,12 +136,106 @@ for (const claim of claims) {
   if (!claim.allowed_wording || !claim.prohibited_overclaim) fail(`${claim.claim_id} lacks wording controls`);
 }
 
+const expectedWorkPackages = new Set(["WP1", "WP2", "WP3", "WP4", "WP5"]);
+const workPackages = Array.isArray(manifest.workPackages) ? manifest.workPackages : [];
+const deliverables = Array.isArray(manifest.deliverables) ? manifest.deliverables : [];
+const workPackageIds = new Set(workPackages.map(({ id }) => id));
+const deliverableIds = new Set(deliverables.map(({ id }) => id));
+if (workPackageIds.size !== workPackages.length) fail("project manifest has duplicate work-package IDs");
+if (deliverableIds.size !== deliverables.length) fail("project manifest has duplicate deliverable IDs");
+if (workPackageIds.size !== expectedWorkPackages.size || [...expectedWorkPackages].some((id) => !workPackageIds.has(id))) {
+  fail("project manifest must define WP1 through WP5 exactly once");
+}
+if (deliverables.length < 8) fail("project manifest does not inventory all public deliverables");
+
+for (const item of workPackages) {
+  if (!item.title || !item.status || !Array.isArray(item.deliverables)) fail(`${item.id} is missing required fields`);
+  if (item.status !== "complete") fail(`${item.id} is not complete`);
+  for (const id of item.deliverables) {
+    if (!deliverableIds.has(id)) fail(`${item.id} refers to unknown deliverable ${id}`);
+  }
+}
+
+const excludedManifestRoots = new Set([".git", ".superpowers", "dist", "private", "release-assets", "tmp", "work"]);
+for (const item of deliverables) {
+  if (!item.id || !item.title || !item.type || !item.path || !item.status) fail("manifest deliverable is missing a required field");
+  const normalized = posix.normalize(item.path);
+  const firstSegment = normalized.split("/")[0];
+  if (item.path.includes("\\") || item.path.startsWith("/") || normalized !== item.path || normalized.startsWith("../")) {
+    fail(`${item.id} uses an unsafe deliverable path: ${item.path}`);
+  }
+  if (excludedManifestRoots.has(firstSegment)) fail(`${item.id} points outside the public deliverable tree`);
+  if (!existsSync(join(root, item.path)) || !statSync(join(root, item.path)).isFile()) fail(`${item.id} path does not exist: ${item.path}`);
+  if (item.status !== "complete") fail(`${item.id} is not complete`);
+}
+if (!Array.isArray(manifest.scopeExclusions) || manifest.scopeExclusions.length < 6) fail("manifest scopeExclusions are incomplete");
+for (const requiredExclusion of ["live Windows or Vanguard measurement", "reverse engineering", "personal data", "synthetic attestation"] ) {
+  if (!manifest.scopeExclusions.some((value) => value.toLowerCase().includes(requiredExclusion.toLowerCase()))) {
+    fail(`manifest scopeExclusions are missing: ${requiredExclusion}`);
+  }
+}
+
+const report = readFileSync(join(root, manifest.canonicalReport), "utf8");
+const requiredReportSections = [
+  "Abstract and Problem Definition",
+  "Research Question, Scope, and Contribution",
+  "Integrity, Authenticity, Privilege, and Availability",
+  "Evidence Taxonomy and Method",
+  "Public Vanguard Architecture and Trust Boundaries",
+  "Threat and Control Analysis",
+  "System-Start and On-Demand Comparison",
+  "Security, Privacy, Compatibility, and Availability Findings",
+  "Interactive Demonstrator Design and Reproducible Results",
+  "Validity, Ethical Boundary, and Non-Goals",
+  "Conclusion",
+  "Public References",
+];
+for (const section of requiredReportSections) {
+  if (!report.includes(section)) fail(`canonical report is missing section: ${section}`);
+}
+const reportWords = markdownWordCount(report);
+if (reportWords < 3500 || reportWords > 5000) fail(`canonical report word count ${reportWords} is outside 3,500–5,000`);
+if (!/not a Vanguard audit/i.test(report)) fail("canonical report lacks the explicit non-audit boundary");
+if (!/no live Windows or Vanguard measurement/i.test(report)) fail("canonical report lacks the explicit no-live-measurement boundary");
+if (/\[C-\d{3}\]\s*[–—-]\s*\[C-\d{3}\]/.test(report)) fail("canonical report uses an unexpanded claim-ID range");
+
+const reportClaimIds = new Set([...report.matchAll(/\[(C-\d{3})\]/g)].map((match) => match[1]));
+const reportSourceIds = new Set([...report.matchAll(/\[(S-[A-Z0-9-]+)\]/g)].map((match) => match[1]));
+for (const id of reportClaimIds) if (!claimIds.has(id)) fail(`canonical report refers to unknown claim ${id}`);
+for (const id of reportSourceIds) if (!sourceIds.has(id)) fail(`canonical report refers to unknown source ${id}`);
+for (const id of claimIds) if (!reportClaimIds.has(id)) fail(`canonical report does not trace registered claim ${id}`);
+for (const id of sourceIds) if (!reportSourceIds.has(id)) fail(`canonical report does not trace registered source ${id}`);
+
+const rootReadme = readFileSync(join(root, "README.md"), "utf8");
+if (!rootReadme.startsWith(`# ${canonicalTitle}\n`)) fail("README does not lead with the canonical project title");
+const readmeOrder = [
+  "## Research question and public contribution",
+  "## Work packages and deliverables",
+  "## Six evidence-bounded findings",
+  "## System model and trust boundaries",
+  "## Evidence model and traceability",
+  "## Interactive Security Demonstrator",
+];
+let previousIndex = -1;
+for (const heading of readmeOrder) {
+  const index = rootReadme.indexOf(heading);
+  if (index < 0) fail(`README is missing project-first heading: ${heading}`);
+  if (index <= previousIndex) fail(`README project-first heading is out of order: ${heading}`);
+  previousIndex = index;
+}
+
 const indexHtml = readFileSync(join(root, "app/index.html"), "utf8");
 for (const requiredText of [
+  "Vanguard Host Trust",
+  "Interactive Security Demonstrator",
+  "System Model",
+  "Posture Model",
+  "Integrity Demonstrator",
+  "Evidence",
   "This page has not inspected a device",
   "Not a Vanguard audit or security assessment",
   "hashing never proves that a baseline file is safe or authentic",
-  "Why this Lab exists",
+  "Role of the Demonstrator",
 ]) {
   if (!indexHtml.includes(requiredText)) fail(`app statement missing: ${requiredText}`);
 }
@@ -123,39 +251,68 @@ for (const file of ["index.html", "styles.css", "app.js", "logic.js"]) {
   if (/\b(fetch|XMLHttpRequest|WebSocket|EventSource)\s*\(/.test(body)) fail(`${file} introduces a runtime network API`);
 }
 
-const textExtensions = new Set([".cjs", ".cff", ".css", ".csv", ".html", ".js", ".json", ".md", ".mjs", ".txt", ".yaml", ".yml"]);
+const textExtensions = new Set(["", ".cjs", ".cff", ".css", ".csv", ".html", ".js", ".json", ".lock", ".md", ".mjs", ".txt", ".yaml", ".yml"]);
 const decodedRegex = (encoded) => new RegExp(Buffer.from(encoded, "base64").toString("utf8"), "i");
 const blockedPatterns = [
   { label: "restricted identifier label", regex: decodedRegex("bWF0cmljb2xh") },
-  { label: "restricted institutional mailbox", regex: decodedRegex("c3R1ZGVudGlcLnVuaW1lXC5pdA==") },
+  { label: "restricted institutional domain", regex: decodedRegex("KHN0dWRlbnRpXC4pP3VuaW1lXC5pdA==") },
   { label: "local macOS home path", regex: decodedRegex("L1VzZXJzLw==") },
   { label: "local Windows home path", regex: /[A-Za-z]:\\Users\\/i },
   { label: "private learning portal", regex: decodedRegex("bW9vZGxl") },
   { label: "private document portal", regex: decodedRegex("c2hhcmVwb2ludFwuY29t") },
+  { label: "institutional project code", regex: decodedRegex("U0VDLVBSSi0=") },
   { label: "email address", regex: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i },
 ];
 
 const allFiles = walk(root).filter((path) => statSync(path).isFile());
 for (const path of allFiles) {
   const rel = relative(root, path);
-  if (!textExtensions.has(extname(path).toLowerCase()) && !path.endsWith("CITATION.cff")) continue;
+  if (!textExtensions.has(extname(path).toLowerCase())) continue;
   const body = readFileSync(path, "utf8");
   for (const { label, regex } of blockedPatterns) {
     if (regex.test(body)) fail(`${rel} contains prohibited public metadata: ${label}`);
   }
 }
 
-const forbiddenBinaryExtensions = new Set([".docx", ".pdf", ".pptx", ".zip"]);
 for (const path of allFiles) {
-  if (forbiddenBinaryExtensions.has(extname(path).toLowerCase())) {
+  if (forbiddenPublicBinaryExtensions.has(extname(path).toLowerCase())) {
     fail(`private/generated binary committed to source tree: ${relative(root, path)}`);
   }
+  const signatureType = detectForbiddenBinarySignature(readFileSync(path));
+  if (signatureType) fail(`prohibited ${signatureType} content in source tree: ${relative(root, path)}`);
 }
 
 const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+const allowedPngChunks = new Set(["IHDR", "IDAT", "IEND"]);
 for (const path of allFiles.filter((value) => extname(value).toLowerCase() === ".png")) {
-  const signature = readFileSync(path).subarray(0, pngSignature.length);
-  if (!signature.equals(pngSignature)) fail(`${relative(root, path)} uses .png without PNG file content`);
+  const file = readFileSync(path);
+  if (!file.subarray(0, pngSignature.length).equals(pngSignature)) {
+    fail(`${relative(root, path)} uses .png without PNG file content`);
+    continue;
+  }
+  let offset = pngSignature.length;
+  let sawIhdr = false;
+  let sawIdat = false;
+  let sawIend = false;
+  while (offset + 12 <= file.length) {
+    const length = file.readUInt32BE(offset);
+    const type = file.subarray(offset + 4, offset + 8).toString("ascii");
+    const next = offset + 12 + length;
+    if (next > file.length) {
+      fail(`${relative(root, path)} has a truncated PNG chunk`);
+      break;
+    }
+    if (type === "IHDR") sawIhdr = true;
+    if (type === "IDAT") sawIdat = true;
+    if (type === "IEND") {
+      sawIend = true;
+      if (next !== file.length) fail(`${relative(root, path)} has trailing data after IEND`);
+      break;
+    }
+    if (!allowedPngChunks.has(type)) fail(`${relative(root, path)} contains nonessential PNG chunk ${type}`);
+    offset = next;
+  }
+  if (!sawIhdr || !sawIdat || !sawIend) fail(`${relative(root, path)} is missing required PNG chunks`);
 }
 
 const allowedActions = new Set([
@@ -181,6 +338,10 @@ for (const file of readdirSync(workflowDirectory).filter((name) => name.endsWith
   }
 }
 
+for (const workflow of ["ci.yml", "release.yml"]) {
+  const body = readFileSync(join(workflowDirectory, workflow), "utf8");
+  if (!/fetch-depth:\s*0/.test(body)) fail(`${workflow} must fetch complete history for public-history validation`);
+}
 const pagesWorkflow = readFileSync(join(workflowDirectory, "pages.yml"), "utf8");
 if (!/include-hidden-files:\s*true/.test(pagesWorkflow)) {
   fail("Pages workflow would omit .well-known/security.txt and .nojekyll");
@@ -189,5 +350,5 @@ if (!/include-hidden-files:\s*true/.test(pagesWorkflow)) {
 JSON.parse(readFileSync(join(root, "docs/hardening/hardening.json"), "utf8"));
 
 if (!process.exitCode) {
-  console.log(`Repository verified: ${sources.length} public sources, ${claims.length} claims, version ${version}.`);
+  console.log(`Repository verified: ${sources.length} public sources, ${claims.length} claims, ${reportWords} report words, version ${version}.`);
 }

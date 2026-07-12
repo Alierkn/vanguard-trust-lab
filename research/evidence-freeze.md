@@ -5,7 +5,7 @@
 - Review date: 12 July 2026
 - Sources: public Riot, Microsoft, NIST, and W3C pages in `sources.csv`
 - Claims: bounded statements in `claims.csv`
-- Lab fixtures: fixed Sample A and Modified Sample B in `app/app.js` and tests
+- Demonstrator fixtures: fixed Sample A and Modified Sample B in `app/app.js` and tests
 
 ## Purpose
 

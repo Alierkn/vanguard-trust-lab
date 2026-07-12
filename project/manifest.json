@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "1.0",
+  "projectId": "vanguard-host-trust",
+  "title": "Vanguard Host Trust: Integrity, Privilege, and Digital Trust",
+  "subtitle": "An Evidence-Bounded System Security Research Project",
+  "version": "1.1.0",
+  "status": "maintained",
+  "evidenceSnapshot": "2026-07-12",
+  "canonicalReport": "project/report.md",
+  "liveDemonstrator": "https://alierkn.github.io/vanguard-trust-lab/",
+  "researchQuestion": "How does Riot Vanguard seek host-level game integrity, and what security and availability trade-offs follow from privileged enforcement and stronger platform requirements?",
+  "workPackages": [
+    {
+      "id": "WP1",
+      "title": "Evidence Governance",
+      "status": "complete",
+      "deliverables": ["D1"]
+    },
+    {
+      "id": "WP2",
+      "title": "System and Threat Modeling",
+      "status": "complete",
+      "deliverables": ["D2A", "D2B"]
+    },
+    {
+      "id": "WP3",
+      "title": "Comparative Security Analysis",
+      "status": "complete",
+      "deliverables": ["D3"]
+    },
+    {
+      "id": "WP4",
+      "title": "Interactive Demonstrator",
+      "status": "complete",
+      "deliverables": ["D4"]
+    },
+    {
+      "id": "WP5",
+      "title": "Validation and Communication",
+      "status": "complete",
+      "deliverables": ["D5", "D6", "D7", "D8"]
+    }
+  ],
+  "deliverables": [
+    {
+      "id": "D1",
+      "title": "Public Evidence Register",
+      "type": "evidence-register",
+      "path": "research/README.md",
+      "status": "complete"
+    },
+    {
+      "id": "D2A",
+      "title": "Simplified System Architecture",
+      "type": "research-model",
+      "path": "research/architecture.md",
+      "status": "complete"
+    },
+    {
+      "id": "D2B",
+      "title": "Threat and Control Model",
+      "type": "research-model",
+      "path": "research/threat-model.md",
+      "status": "complete"
+    },
+    {
+      "id": "D3",
+      "title": "Canonical Public Report",
+      "type": "report",
+      "path": "project/report.md",
+      "status": "complete"
+    },
+    {
+      "id": "D4",
+      "title": "Interactive Security Demonstrator",
+      "type": "software",
+      "path": "app/index.html",
+      "status": "complete"
+    },
+    {
+      "id": "D5",
+      "title": "Reproducibility and Validation Package",
+      "type": "validation",
+      "path": "docs/reproducibility.md",
+      "status": "complete"
+    },
+    {
+      "id": "D6",
+      "title": "Presentation Guide",
+      "type": "presentation-guide",
+      "path": "project/presentation-guide.md",
+      "status": "complete"
+    },
+    {
+      "id": "D7",
+      "title": "Turkish Project Summary",
+      "type": "summary",
+      "path": "project/summary-tr.md",
+      "status": "complete"
+    },
+    {
+      "id": "D8",
+      "title": "Machine-Readable Project Manifest",
+      "type": "manifest",
+      "path": "project/manifest.json",
+      "status": "complete"
+    }
+  ],
+  "metrics": {
+    "publicSources": 15,
+    "registeredClaims": 18
+  },
+  "scopeExclusions": [
+    "live Windows or Vanguard measurement",
+    "reverse engineering or binary inspection",
+    "exploit, bypass, cheat, or evasion development",
+    "memory, process, driver, firmware, or network inspection",
+    "performance benchmarking or device certification",
+    "private sources, credentials, account data, or personal data",
+    "product effectiveness, privacy, or safety certification",
+    "synthetic attestation protocol prototype"
+  ]
+}

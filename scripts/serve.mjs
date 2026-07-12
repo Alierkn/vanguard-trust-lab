@@ -66,6 +66,6 @@ const server = createServer((request, response) => {
 });
 
 server.listen(port, host, () => {
-  console.log(`Vanguard Trust Lab: http://${host}:${port}`);
+  console.log(`Vanguard Host Trust demonstrator: http://${host}:${port}`);
   console.log("Press Ctrl+C to stop.");
 });

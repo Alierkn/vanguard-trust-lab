@@ -7,7 +7,7 @@ Contributions are welcome when they improve correctness, reproducibility, access
 - factual corrections backed by an official primary source;
 - accessibility, documentation, or cross-platform improvements;
 - deterministic tests and privacy/security hardening;
-- clearer separation of vendor statements, platform mechanisms, project inference, and Lab results;
+- clearer separation of vendor statements, platform mechanisms, project inference, and demonstrator results;
 - reviewed maintenance updates to pinned tooling.
 
 Requests involving Vanguard inspection, bypass research, cheat development, exploit code, credentials, packet interception, or kernel-driver development are out of scope.

@@ -1,6 +1,6 @@
 # Support
 
-## Run the Lab
+## Run the Interactive Security Demonstrator
 
 ```sh
 npm ci --ignore-scripts

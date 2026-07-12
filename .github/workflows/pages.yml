@@ -1,4 +1,4 @@
-name: Deploy Lab to GitHub Pages
+name: Deploy Interactive Security Demonstrator to GitHub Pages
 
 on:
   push:
@@ -21,13 +21,14 @@ concurrency:
 
 jobs:
   build:
-    name: Validate and package static Lab
+    name: Validate and package static demonstrator
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Check out repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Configure Node.js

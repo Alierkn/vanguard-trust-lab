@@ -8,7 +8,7 @@ The repository owner maintains the release branch. Contributors participate thro
 
 1. protect people, systems, privacy, and research integrity;
 2. preserve factual correctness and evidence boundaries;
-3. keep the Lab understandable and reproducible;
+3. keep the research dossier and demonstrator understandable and reproducible;
 4. minimize dependencies, privileges, and maintenance risk;
 5. improve explanatory quality without overstating conclusions.
 

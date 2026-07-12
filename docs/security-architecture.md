@@ -10,7 +10,7 @@ The public artifact must be reproducible without expanding trust into privileged
 flowchart LR
     subgraph private["Private authoring boundary"]
       restricted["Restricted identity and deliverables"]
-      source["Candidate research and Lab source"]
+      source["Candidate research and demonstrator source"]
     end
 
     gate["Fail-closed public gate\nallowlist + text checks + tests"]
@@ -18,7 +18,7 @@ flowchart LR
     subgraph public["Public repository boundary"]
       git["Fresh Git history"]
       research["Public sources and bounded claims"]
-      app["Static browser Lab"]
+      app["Interactive Security Demonstrator"]
       automation["Pinned least-privilege automation"]
     end
 
@@ -58,7 +58,7 @@ Source links can be opened by a user, but the application itself does not use `f
 
 1. Every public Git object belongs to a new, public-only history.
 2. Public research claims reference only registered HTTPS sources on approved primary domains.
-3. The browser Lab loads no remote script, style, font, or runtime package.
+3. The Interactive Security Demonstrator loads no remote script, style, font, or runtime package.
 4. Selected file bytes remain inside the browser context; baseline state is memory-only.
 5. Pages publishes `app/` and no other repository path.
 6. Workflow tokens default to read-only; write permissions exist only in the job that needs them.

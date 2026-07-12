@@ -7,7 +7,7 @@
 | 1.x | Yes |
 | Earlier or untagged snapshots | No |
 
-Support covers this educational browser Lab and repository automation. It does not cover Riot Vanguard, League of Legends, Windows, firmware, or any other third-party product.
+Support covers the public research dossier, Interactive Security Demonstrator, and repository automation. It does not cover Riot Vanguard, League of Legends, Windows, firmware, or any other third-party product.
 
 ## Report a repository vulnerability
 
@@ -19,4 +19,4 @@ Do not include credentials, personal data, malware, cheat code, bypass instructi
 
 Do not report vulnerabilities in Riot, Vanguard, Microsoft, Windows, firmware, or drivers to this repository. Use the affected vendor's current official channel and do not test third-party systems without authorization.
 
-The Lab has no backend, account system, upload endpoint, analytics, external runtime dependency, or persistent browser storage. User-selected files remain in the browser context.
+The demonstrator has no backend, account system, upload endpoint, analytics, external runtime dependency, or persistent browser storage. User-selected files remain in the browser context.
