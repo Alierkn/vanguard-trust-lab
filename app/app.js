@@ -169,14 +169,14 @@
 
   loadSampleA.addEventListener("click", () => {
     const sample = new File([
-      "Vanguard Trust Lab educational sample\nVersion: 1\nIntegrity means detecting unauthorized change.\n",
+      "Vanguard Host Trust educational sample\nVersion: 1\nIntegrity means detecting unauthorized change.\n",
     ], "vanguard-host-trust-sample.txt", { type: "text/plain" });
     handleFile(sample);
   });
 
   loadSampleB.addEventListener("click", () => {
     const sample = new File([
-      "Vanguard Trust Lab educational sample\nVersion: 2\nIntegrity means detecting unauthorized change.\n",
+      "Vanguard Host Trust educational sample\nVersion: 2\nIntegrity means detecting unauthorized change.\n",
     ], "vanguard-host-trust-sample-modified.txt", { type: "text/plain" });
     handleFile(sample);
   });

@@ -4,7 +4,7 @@
 
 Semantic versions identify the public research-software artifact. A release is immutable; corrections require a new version. `VERSION`, package metadata, lockfile metadata, `CITATION.cff`, and `project/manifest.json` must agree before tagging.
 
-## Allowed v1.1.0 release assets
+## Allowed release assets
 
 - source ZIP built from the tagged public commit;
 - `CHECKSUMS.sha256` for that archive.
@@ -29,12 +29,12 @@ Release notes use exactly these reader-facing sections:
 
 ## Release checklist
 
-1. Confirm v1.1.0 metadata and the changelog entry.
+1. Read `VERSION`, then confirm that root metadata, the project manifest, CFF, and changelog entry use that version.
 2. Run `npm ci --ignore-scripts` and `npm run ci` in a full clean clone.
 3. Audit the current tree and all reachable public Git history.
 4. Confirm both regenerated PNGs contain no text or EXIF metadata chunks.
 5. Merge through a reviewed pull request after required CI and CodeQL checks pass.
-6. Create an annotated `v1.1.0` tag from the validated `main` commit.
+6. Create an annotated `v${VERSION}` tag from the validated `main` commit.
 7. Let the pinned release workflow build, extract, rescan, retest, checksum, and attest the source candidate.
 8. Independently verify `CHECKSUMS.sha256` and GitHub artifact provenance.
 9. Publish an immutable GitHub Release with the four required note sections and only the two allowed project assets.
@@ -44,6 +44,7 @@ Long-term archival may be added later. No DOI or external archive is claimed unt
 Independent provenance verification uses:
 
 ```sh
-gh attestation verify vanguard-trust-lab-v1.1.0.zip --repo Alierkn/vanguard-trust-lab
+VERSION=$(cat VERSION)
+gh attestation verify "vanguard-trust-lab-v${VERSION}.zip" --repo Alierkn/vanguard-trust-lab
 gh attestation verify CHECKSUMS.sha256 --repo Alierkn/vanguard-trust-lab
 ```

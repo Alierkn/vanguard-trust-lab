@@ -83,3 +83,31 @@ test("history verification rejects special Git modes", () => {
   assert.match(historyVerifier, /160000/);
   assert.match(historyVerifier, /unexpected Git mode/);
 });
+
+test("history verification reports a tracked symlink without reading it as a blob", () => {
+  const fixture = mkdtempSync(join(tmpdir(), "vht-history-"));
+  try {
+    writeFileSync(join(fixture, "target.txt"), "target", "utf8");
+    symlinkSync("target.txt", join(fixture, "link.txt"));
+    for (const args of [
+      ["init", "-q"],
+      ["config", "user.name", "Repository Test"],
+      ["config", "user.email", "repository-test.invalid"],
+      ["add", "."],
+      ["commit", "-qm", "fixture"],
+    ]) {
+      const git = spawnSync("git", args, { cwd: fixture, encoding: "utf8" });
+      assert.equal(git.status, 0, git.stderr);
+    }
+    const result = spawnSync(process.execPath, [join(root, "scripts/verify-history.mjs")], {
+      cwd: root,
+      env: { ...process.env, PUBLIC_REPOSITORY_ROOT: fixture },
+      encoding: "utf8",
+    });
+    assert.notEqual(result.status, 0, result.stdout);
+    assert.match(result.stderr, /symbolic link 120000/i);
+    assert.doesNotMatch(result.stderr, /unable to inspect historical blobs/i);
+  } finally {
+    rmSync(fixture, { force: true, recursive: true });
+  }
+});

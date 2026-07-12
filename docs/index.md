@@ -24,6 +24,7 @@
 - [Ethics and scope](../research/ethics-and-scope.md)
 - [Public evidence snapshot](../research/evidence-freeze.md)
 - [Source register](../research/sources.csv)
+- [Human-readable references](../research/references.md)
 - [Claim register](../research/claims.csv)
 
 ## Security and operations

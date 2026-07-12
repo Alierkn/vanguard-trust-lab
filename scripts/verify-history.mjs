@@ -10,7 +10,7 @@ import {
   restrictedMetadataPatterns,
 } from "./public-content-policy.mjs";
 
-const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const root = resolve(process.env.PUBLIC_REPOSITORY_ROOT || fileURLToPath(new URL("..", import.meta.url)));
 
 if (!existsSync(resolve(root, ".git"))) {
   console.log("Git history unavailable in source archive; current-tree release boundaries remain verified.");
@@ -54,12 +54,13 @@ try {
       if (tab < 0) continue;
       const metadata = record.slice(0, tab).split(" ");
       const mode = metadata[0];
+      const type = metadata[1];
       const blob = metadata[2];
       const path = record.slice(tab + 1);
       if (!allowedBlobModes.has(mode)) unexpectedModes.push({ commit, mode, path });
       if (forbiddenPublicBinaryExtensions.has(extname(path).toLowerCase())) forbiddenPaths.push({ commit, path });
-      if (blob && !blobPaths.has(blob)) blobPaths.set(blob, path);
-      if (blob && postCutoverCommits.has(commit) && !postCutoverBlobPaths.has(blob)) postCutoverBlobPaths.set(blob, path);
+      if (type === "blob" && blob && !blobPaths.has(blob)) blobPaths.set(blob, path);
+      if (type === "blob" && blob && postCutoverCommits.has(commit) && !postCutoverBlobPaths.has(blob)) postCutoverBlobPaths.set(blob, path);
     }
   }
 } catch (error) {

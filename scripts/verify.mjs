@@ -98,7 +98,8 @@ if (version !== packageLock.version || version !== packageLock.packages?.[""]?.v
 }
 if (!citation.includes(`version: ${version}`)) fail("CITATION.cff version differs from VERSION");
 if (!citation.includes(`title: "${canonicalTitle}"`)) fail("CITATION.cff does not use the canonical project title");
-if (!citation.includes('name: "Vanguard Trust Lab Contributors"')) fail("CITATION.cff does not use the anonymous contributor identity");
+if (!citation.includes('name: "Vanguard Host Trust Contributors"')) fail("CITATION.cff does not use the anonymous contributor identity");
+if (!/license:\s*\n\s*- MIT\s*\n\s*- CC-BY-4\.0/.test(citation)) fail("CITATION.cff does not describe the scoped project licenses");
 if (manifest.schemaVersion !== "1.0") fail("project manifest schemaVersion must be 1.0");
 if (manifest.projectId !== "vanguard-host-trust") fail("project manifest has an unexpected projectId");
 if (manifest.title !== canonicalTitle) fail("project manifest does not use the canonical title");

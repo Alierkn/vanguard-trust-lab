@@ -1,9 +1,9 @@
 cff-version: 1.2.0
-message: "If you use this software or its research method, cite this repository."
+message: "If you use this software or its research method, cite this repository and consult LICENSE.md for the scoped license terms."
 title: "Vanguard Host Trust: Integrity, Privilege, and Digital Trust"
 type: software
 authors:
-  - name: "Vanguard Trust Lab Contributors"
+  - name: "Vanguard Host Trust Contributors"
 abstract: >-
   An evidence-bounded system security research project examining Riot
   Vanguard's public host-trust model, privileged enforcement, platform
@@ -11,7 +11,9 @@ abstract: >-
   security demonstrator.
 version: 1.1.0
 date-released: 2026-07-12
-license: MIT
+license:
+  - MIT
+  - CC-BY-4.0
 repository-code: "https://github.com/Alierkn/vanguard-trust-lab"
 url: "https://github.com/Alierkn/vanguard-trust-lab"
 keywords:

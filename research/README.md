@@ -9,6 +9,7 @@ This directory is the auditable evidence layer behind the canonical report and I
 - `architecture.md` — simplified public component and trust model.
 - `threat-model.md` — assets, adversary, controls, assumptions, and residual risk.
 - `sources.csv` — public primary-source register.
+- `references.md` — human-readable source index with direct official links.
 - `claims.csv` — material claims, evidence class, allowed wording, and prohibited overclaim.
 - `evidence-freeze.md` — public evidence snapshot and reopening rules.
 - `limitations.md` — validity and generalization limits.

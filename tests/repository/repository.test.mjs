@@ -48,10 +48,13 @@ test("app has a restrictive static-host CSP", () => {
 });
 
 test("registered fixed samples retain their expected digest", () => {
-  const sampleA = "Vanguard Trust Lab educational sample\nVersion: 1\nIntegrity means detecting unauthorized change.\n";
-  const sampleB = "Vanguard Trust Lab educational sample\nVersion: 2\nIntegrity means detecting unauthorized change.\n";
-  assert.equal(createHash("sha256").update(sampleA).digest("hex"), "6af1022470965f08d997eb048309a6b95b898289e19f224df7a3e91604ff004b");
-  assert.equal(createHash("sha256").update(sampleB).digest("hex"), "7240f01f4de745ed075feea3edd5d02c8632979050f31126faf3c5cfd44c10a6");
+  const sampleA = "Vanguard Host Trust educational sample\nVersion: 1\nIntegrity means detecting unauthorized change.\n";
+  const sampleB = "Vanguard Host Trust educational sample\nVersion: 2\nIntegrity means detecting unauthorized change.\n";
+  assert.equal(createHash("sha256").update(sampleA).digest("hex"), "98e1521a889fa6ef3e88b60a125bd569f0b6a9c228a4b492e902ef6b2c8e7c9a");
+  assert.equal(createHash("sha256").update(sampleB).digest("hex"), "677197ccc10c1da9241d73ec32413cc125e0fd89616ca6c4637247b85f7e5588");
+  const app = read("app/app.js");
+  assert.ok(app.includes(JSON.stringify(sampleA).slice(1, -1)));
+  assert.ok(app.includes(JSON.stringify(sampleB).slice(1, -1)));
 });
 
 test("manifest and root metadata form one v1.1.0 contract", () => {
@@ -130,6 +133,7 @@ test("canonical report is complete and all traceability IDs are registered", () 
 test("README presents the project before the demonstrator", () => {
   const readme = read("README.md");
   assert.ok(readme.startsWith(`# ${canonicalTitle}\n`));
+  assert.match(readme, /\*\*Start here:\*\*.*Report.*Demonstrator.*Evidence.*Reproduce.*Release/i);
   const headings = [
     "## Research question and public contribution",
     "## Work packages and deliverables",
@@ -141,6 +145,22 @@ test("README presents the project before the demonstrator", () => {
   const positions = headings.map((heading) => readme.indexOf(heading));
   assert.ok(positions.every((position) => position >= 0));
   assert.deepEqual([...positions].sort((a, b) => a - b), positions);
+  for (const path of ["CONTRIBUTING.md", "SECURITY.md", "SUPPORT.md", "CODE_OF_CONDUCT.md"]) {
+    assert.match(readme, new RegExp(`\\]\\(${path.replace(".", "\\.")}\\)`));
+  }
+});
+
+test("human-readable references mirror all registered public sources", () => {
+  assert.equal(existsSync(resolve(root, "research/references.md")), true);
+  const references = read("research/references.md");
+  const sourceRows = read("research/sources.csv").split(/\r?\n/).slice(1).filter(Boolean);
+  assert.equal(sourceRows.length, 15);
+  for (const row of sourceRows) {
+    const sourceId = row.match(/^"([^"]+)"/)?.[1];
+    const url = row.match(/"(https:\/\/[^\"]+)"/)?.[1];
+    assert.match(references, new RegExp(`\\[${sourceId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\]`));
+    assert.ok(references.includes(`](${url})`), url);
+  }
 });
 
 test("presentation guide contains ten slides, speaker-note blocks, and defense answers", () => {
@@ -204,8 +224,11 @@ test("public binary boundary covers office, spreadsheet, PDF, executable, and ar
 test("public metadata uses an anonymous project identity", () => {
   const packageJson = JSON.parse(read("package.json"));
   const citation = read("CITATION.cff");
-  assert.equal(packageJson.author.name, "Vanguard Trust Lab Contributors");
+  assert.equal(packageJson.author.name, "Vanguard Host Trust Contributors");
   assert.equal("email" in packageJson.author, false);
-  assert.match(citation, /Vanguard Trust Lab Contributors/);
+  assert.match(citation, /Vanguard Host Trust Contributors/);
   assert.doesNotMatch(citation, /email:/i);
+  assert.match(citation, /license:\n  - MIT\n  - CC-BY-4\.0/);
+  assert.match(read("LICENSE.md"), /Software code, tests, workflows, and build scripts.*MIT/s);
+  assert.match(read("LICENSE.md"), /research prose, diagrams, and documentation.*Creative Commons Attribution 4\.0/s);
 });

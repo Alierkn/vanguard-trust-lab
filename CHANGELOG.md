@@ -4,9 +4,12 @@ All notable changes follow a Keep a Changelog style. Versions describe this repo
 
 ## [Unreleased]
 
-### Planned
+### Changed
 
-- Synthetic signed-evidence exercise that remains entirely local and product-independent.
+- Removed internal publication-working material from the current public tree.
+- Strengthened public-path, history, local-link, and static-server validation.
+- Unified the visible contributor identity and added a human-readable official-source index.
+- Clarified the repository's scoped MIT and CC BY 4.0 licensing metadata.
 
 ## [1.1.0] - 2026-07-12
 

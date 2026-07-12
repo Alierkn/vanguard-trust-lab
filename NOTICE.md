@@ -1,6 +1,6 @@
 # Notices and Attribution
 
-Copyright 2026 Vanguard Trust Lab Contributors.
+Copyright 2026 Vanguard Host Trust Contributors.
 
 Original software in this repository is available under the MIT License. Original research prose and diagrams are available under Creative Commons Attribution 4.0 International unless a file states otherwise.
 

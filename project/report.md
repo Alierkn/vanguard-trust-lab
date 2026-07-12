@@ -136,7 +136,7 @@ The demonstrator is intentionally static and dependency-free at runtime. It has 
 
 The posture exercise aggregates five manual Boolean inputs. An incomplete state means only that the reader has not confirmed every field. A complete state means only that the five public groups were manually marked. It is not a Vanguard Pre-Check result, and it cannot decide whether a Windows PC is eligible. The pedagogical result is that a trust decision commonly combines several attributes rather than relying on one control.
 
-The integrity exercise provides two harmless fixed text samples. Sample A produces SHA-256 `6af1022470965f08d997eb048309a6b95b898289e19f224df7a3e91604ff004b`. Modified Sample B produces `7240f01f4de745ed075feea3edd5d02c8632979050f31126faf3c5cfd44c10a6`. Setting Sample A as the baseline and comparing Sample B yields `MISMATCH`; repository tests reproduce both digests and the comparison semantics [C-016]. A match would prove only equality with the selected baseline for this exercise. Neither outcome proves authenticity, authorization, safety, malware absence, or any Vanguard property [C-012].
+The integrity exercise provides two harmless fixed text samples. Sample A produces SHA-256 `98e1521a889fa6ef3e88b60a125bd569f0b6a9c228a4b492e902ef6b2c8e7c9a`. Modified Sample B produces `677197ccc10c1da9241d73ec32413cc125e0fd89616ca6c4637247b85f7e5588`. Setting Sample A as the baseline and comparing Sample B yields `MISMATCH`; repository tests reproduce both digests and the comparison semantics [C-016]. A match would prove only equality with the selected baseline for this exercise. Neither outcome proves authenticity, authorization, safety, malware absence, or any Vanguard property [C-012].
 
 Reproduction uses Node only to serve and test static files consistently. `npm ci --ignore-scripts` establishes the locked development environment; `npm run ci` checks syntax, unit behavior, repository invariants, evidence links, and security boundaries; `npm run serve` exposes the static app on localhost. The maintained CI matrix covers Node 22 and 24, while the application itself runs in a current browser on macOS, Windows, or Linux. Determinism comes from fixed input bytes and the standard SHA-256 algorithm, not from a simulated anti-cheat result.
 
@@ -164,7 +164,7 @@ The Interactive Security Demonstrator reinforces that boundary. It makes privile
 
 ## 12. Public References
 
-The canonical register, including access dates and scope notes, is [`research/sources.csv`](../research/sources.csv).
+The machine-readable canonical register is [`research/sources.csv`](../research/sources.csv). A [human-readable reference index](../research/references.md) provides the same 15 records with direct official links, access dates, evidence classes, and scope notes.
 
 - `[S-NIST-80053]` NIST, *Security and Privacy Controls for Information Systems and Organizations, SP 800-53 Rev. 5*.
 - `[S-NIST-ROOTKIT]` NIST, *rootkit — CSRC Glossary*.
