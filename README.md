@@ -9,7 +9,7 @@ This public project examines how Riot Vanguard seeks host-level game integrity a
 [![GitHub release](https://img.shields.io/github/v/release/Alierkn/vanguard-trust-lab?display_name=tag&sort=semver)](https://github.com/Alierkn/vanguard-trust-lab/releases)
 [![License: MIT + CC BY 4.0](https://img.shields.io/badge/license-MIT%20%2B%20CC%20BY%204.0-071B3D)](LICENSE.md)
 
-| Project status | Public dossier complete — v1.1.0 |
+| Project status | Maintained public dossier — v1.1.1 |
 |---|---|
 | Evidence snapshot | 12 July 2026 |
 | Evidence base | 15 official public sources · 18 bounded claims |

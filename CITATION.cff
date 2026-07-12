@@ -9,8 +9,8 @@ abstract: >-
   Vanguard's public host-trust model, privileged enforcement, platform
   requirements, and availability trade-offs, with a supporting interactive
   security demonstrator.
-version: 1.1.0
-date-released: 2026-07-12
+version: 1.1.1
+date-released: 2026-07-13
 license:
   - MIT
   - CC-BY-4.0

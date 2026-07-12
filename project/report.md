@@ -2,7 +2,7 @@
 
 *An Evidence-Bounded System Security Research Project*
 
-Version 1.1.0 · Public evidence snapshot: 12 July 2026
+Version 1.1.1 · Public evidence snapshot: 12 July 2026
 
 ## 1. Abstract and Problem Definition
 

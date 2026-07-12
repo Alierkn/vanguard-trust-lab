@@ -4,12 +4,21 @@ All notable changes follow a Keep a Changelog style. Versions describe this repo
 
 ## [Unreleased]
 
+No unreleased changes.
+
+## [1.1.1] - 2026-07-13
+
 ### Changed
 
 - Removed internal publication-working material from the current public tree.
 - Strengthened public-path, history, local-link, and static-server validation.
 - Unified the visible contributor identity and added a human-readable official-source index.
 - Clarified the repository's scoped MIT and CC BY 4.0 licensing metadata.
+
+### Security
+
+- Added fail-closed path and file-mode validation, historical sensitive-content checks, deterministic local-link validation, and real-path containment for the development server.
+- Added pull-request Pages packaging validation and scheduled official-source link health checks.
 
 ## [1.1.0] - 2026-07-12
 

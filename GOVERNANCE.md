@@ -19,8 +19,9 @@ Material architectural choices are recorded in `docs/adr/`. Research corrections
 - `main` is the releasable source of truth.
 - Work uses short-lived branches and pull requests.
 - Required checks must pass before merge.
-- Force pushes and deletion of `main` are blocked by a GitHub ruleset.
-- Reviews are required when a second maintainer is available; the ruleset must not make emergency recovery impossible for a single-owner repository.
+- Force pushes and deletion of `main` are blocked by GitHub branch protection.
+- Reviews are required when a second maintainer is available; protection must not make emergency recovery impossible for a single-owner repository.
+- Public branches use purpose-based names such as `feat/`, `fix/`, `docs/`, `research/`, `ci/`, `chore/`, and `release/`.
 
 ## Releases
 

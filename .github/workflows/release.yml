@@ -40,7 +40,11 @@ jobs:
           if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
             [[ "${GITHUB_REF_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
             test "${GITHUB_REF_NAME}" = "v$(tr -d '\n' < VERSION)"
+            test "$(git cat-file -t "${GITHUB_REF_NAME}")" = "tag"
           fi
+          git fetch --no-tags origin main
+          RELEASE_COMMIT="$(git rev-parse HEAD^{commit})"
+          git merge-base --is-ancestor "${RELEASE_COMMIT}" origin/main
 
       - name: Build immutable source bundle
         shell: bash

@@ -95,13 +95,13 @@ test("registered fixed samples retain their expected digest", () => {
   assert.ok(app.includes(JSON.stringify(sampleB).slice(1, -1)));
 });
 
-test("manifest and root metadata form one v1.1.0 contract", () => {
+test("manifest and root metadata form one v1.1.1 contract", () => {
   const manifest = JSON.parse(read("project/manifest.json"));
   const packageJson = JSON.parse(read("package.json"));
   const packageLock = JSON.parse(read("package-lock.json"));
   const version = read("VERSION").trim();
   const citation = read("CITATION.cff");
-  assert.equal(version, "1.1.0");
+  assert.equal(version, "1.1.1");
   assert.equal(packageJson.version, version);
   assert.equal(packageLock.version, version);
   assert.equal(packageLock.packages[""].version, version);
@@ -240,6 +240,18 @@ test("CI and release workflows enforce full-history and archive revalidation", (
   assert.match(release, /sha256sum -c CHECKSUMS\.sha256/);
   assert.match(release, /npm run ci/);
   assert.match(release, /gh attestation verify/);
+  assert.match(release, /merge-base --is-ancestor/);
+  const pages = read(".github/workflows/pages.yml");
+  assert.match(pages, /pull_request:/);
+  assert.match(pages, /github\.event_name != 'pull_request'/);
+  const releaseRecord = read("docs/releases/v1.1.1.md");
+  for (const heading of ["Research", "Demonstrator", "Evidence Snapshot", "Known Limits"]) {
+    assert.match(releaseRecord, new RegExp(`^## ${heading}$`, "m"));
+  }
+  assert.ok(existsSync(resolve(root, ".github/workflows/link-health.yml")));
+  const linkHealth = read(".github/workflows/link-health.yml");
+  assert.match(linkHealth, /schedule:/);
+  assert.match(linkHealth, /npm run check:external-links/);
 });
 
 test("public binary boundary covers office, spreadsheet, PDF, executable, and archive formats", () => {

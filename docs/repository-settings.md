@@ -9,13 +9,17 @@ This file records controls that live outside Git and therefore cannot be enforce
 - Issues enabled; wiki and unused features disabled.
 - No personal email or private project metadata in profile-facing repository fields.
 
-## Main branch ruleset
+## Main branch protection
+
+The repository currently uses GitHub branch protection for `main`. If it is migrated to a repository ruleset, the effective controls below must remain equal or stronger.
 
 - block deletion and non-fast-forward updates;
 - require pull requests and passing CI/CodeQL when collaboration makes review practical;
 - require conversation resolution and linear history;
 - do not require a review that a single maintainer cannot satisfy;
 - allow emergency bypass only to the repository owner with a documented reason.
+
+Public branches use neutral, purpose-based prefixes: `feat/`, `fix/`, `docs/`, `research/`, `ci/`, `chore/`, and `release/`. Temporary planning or authoring notes remain outside the tracked repository.
 
 ## Actions
 

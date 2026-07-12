@@ -6,9 +6,11 @@
 
 The project combines a traceable public report, a simplified system and threat model, and a dependency-free Interactive Security Demonstrator. It does not inspect Vanguard, Windows, firmware, accounts, or a real device. Its purpose is to explain where trust is placed, which public evidence supports the model, and which questions remain outside the evidence.
 
-**Version:** 1.1.0  
-**Status:** Maintained public dossier; v1.1.0 work packages complete  
-**Evidence snapshot:** 12 July 2026  
+**Version:** 1.1.1
+
+**Status:** Maintained public dossier; v1.1.1 work packages complete
+
+**Evidence snapshot:** 12 July 2026
 **Canonical report:** [report.md](report.md)
 
 ## Evidence-to-result flow
