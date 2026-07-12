@@ -245,7 +245,7 @@ if (!indexHtml.includes('name="referrer" content="no-referrer"')) fail("referrer
 for (const file of ["index.html", "styles.css", "app.js", "logic.js"]) {
   const body = readFileSync(join(root, "app", file), "utf8");
   if (/<script[^>]+src=["']https?:/i.test(body)) fail(`${file} loads a remote script`);
-  if (/<link[^>]+href=["']https?:/i.test(body)) fail(`${file} loads a remote stylesheet or font`);
+  if (/<link[^>]+rel=["'](?:stylesheet|preload|modulepreload)["'][^>]+href=["']https?:/i.test(body)) fail(`${file} loads a remote stylesheet or font`);
   if (/\b(fetch|XMLHttpRequest|WebSocket|EventSource)\s*\(/.test(body)) fail(`${file} introduces a runtime network API`);
 }
 

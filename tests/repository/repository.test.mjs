@@ -10,11 +10,22 @@ const root = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const canonicalTitle = "Vanguard Host Trust: Integrity, Privilege, and Digital Trust";
 const read = (path) => readFileSync(resolve(root, path), "utf8");
 
+function contrastRatio(first, second) {
+  const luminance = (hex) => {
+    const channels = hex.match(/[0-9a-f]{2}/gi).map((value) => Number.parseInt(value, 16) / 255);
+    const [red, green, blue] = channels.map((value) => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+  };
+  const light = Math.max(luminance(first), luminance(second));
+  const dark = Math.min(luminance(first), luminance(second));
+  return (light + 0.05) / (dark + 0.05);
+}
+
 test("static app has no remote runtime dependency", () => {
   for (const path of ["app/index.html", "app/styles.css", "app/app.js", "app/logic.js"]) {
     const body = read(path);
     assert.doesNotMatch(body, /<script[^>]+src=["']https?:/i);
-    assert.doesNotMatch(body, /<link[^>]+href=["']https?:/i);
+    assert.doesNotMatch(body, /<link[^>]+rel=["'](?:stylesheet|preload|modulepreload)["'][^>]+href=["']https?:/i);
     assert.doesNotMatch(body, /\b(fetch|XMLHttpRequest|WebSocket|EventSource)\s*\(/);
   }
 });
@@ -45,6 +56,33 @@ test("app has a restrictive static-host CSP", () => {
     assert.match(html, new RegExp(directive.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
   assert.match(html, /name="referrer" content="no-referrer"/);
+});
+
+test("app metadata and local sharing assets identify the canonical public project", () => {
+  const html = read("app/index.html");
+  assert.match(html, /rel="canonical" href="https:\/\/alierkn\.github\.io\/vanguard-trust-lab\/"/);
+  assert.match(html, /property="og:title" content="Vanguard Host Trust/);
+  assert.match(html, /property="og:image" content="https:\/\/alierkn\.github\.io\/vanguard-trust-lab\/social-preview\.png"/);
+  assert.match(html, /name="twitter:card" content="summary_large_image"/);
+  assert.match(html, /rel="icon" href="favicon\.svg"/);
+  assert.match(html, /class="nav-overflow-cue"/);
+  assert.ok(existsSync(resolve(root, "app/favicon.svg")));
+  assert.ok(existsSync(resolve(root, "app/social-preview.png")));
+});
+
+test("demonstrator visual tokens meet contrast and avoid generic decorative treatments", () => {
+  const css = read("app/styles.css");
+  const token = (name) => css.match(new RegExp(`--${name}:\\s*(#[0-9a-f]{6})`, "i"))?.[1];
+  const greenText = token("green-text");
+  const focusRing = token("focus-ring");
+  assert.ok(greenText);
+  assert.ok(focusRing);
+  assert.ok(contrastRatio(greenText, token("white")) >= 4.5);
+  assert.ok(contrastRatio(focusRing, token("white")) >= 3);
+  assert.doesNotMatch(css, /font-family:\s*Inter/i);
+  assert.doesNotMatch(css, /backdrop-filter/i);
+  assert.doesNotMatch(css, /border-left:\s*3px/i);
+  assert.doesNotMatch(css, /box-shadow:\s*var\(--shadow\)/i);
 });
 
 test("registered fixed samples retain their expected digest", () => {

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Vanguard Host Trust mark">
+  <rect width="64" height="64" rx="12" fill="#071b3d"/>
+  <path d="M32 10 49 17v13c0 11-7.2 20.7-17 25-9.8-4.3-17-14-17-25V17l17-7Z" fill="none" stroke="#ffffff" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M10 32h44" stroke="#d3131f" stroke-width="4" stroke-dasharray="6 4"/>
+  <circle cx="32" cy="32" r="4" fill="#ffffff"/>
+</svg>
