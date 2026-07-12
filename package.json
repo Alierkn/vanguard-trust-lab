@@ -22,7 +22,7 @@
   "packageManager": "npm@11.6.2",
   "scripts": {
     "serve": "node scripts/serve.mjs",
-    "lint": "node --check app/app.js && node --check app/logic.js && node --check scripts/serve.mjs && node --check scripts/public-boundaries.mjs && node --check scripts/verify.mjs && node --check scripts/verify-history.mjs && node --check scripts/check-links.mjs && node --check scripts/generate-checksums.mjs && node --check scripts/sanitize-screenshots.mjs",
+    "lint": "node --check app/app.js && node --check app/logic.js && node --check scripts/serve.mjs && node --check scripts/public-boundaries.mjs && node --check scripts/public-content-policy.mjs && node --check scripts/public-files.mjs && node --check scripts/verify.mjs && node --check scripts/verify-history.mjs && node --check scripts/check-links.mjs && node --check scripts/generate-checksums.mjs && node --check scripts/sanitize-screenshots.mjs",
     "test": "node --test tests/unit/*.test.cjs tests/repository/*.test.mjs",
     "verify": "node scripts/verify.mjs",
     "verify:history": "node scripts/verify-history.mjs",

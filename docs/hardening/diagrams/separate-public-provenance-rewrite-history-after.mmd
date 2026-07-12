@@ -1,7 +1,0 @@
-flowchart LR
-    Legacy["Existing mixed Git history"] --> Rewrite["Rewrite blobs, authors, refs and tags"]
-    Releases["Existing releases and artifacts"] --> Purge["Delete and replace assets"]
-    Rewrite --> Gate["Publication gate"]
-    Purge --> Gate
-    Gate --> Host["Rewritten public repository"]
-    Copies["Clones, caches and downloads"] -. "cannot be recalled" .-> Host

@@ -87,10 +87,27 @@ test("manifest IDs and public deliverable paths are valid", () => {
   for (const deliverable of manifest.deliverables) {
     assert.equal(deliverable.status, "complete");
     assert.doesNotMatch(deliverable.path, /^(?:\/|\.\.\/)|\\/);
+    assert.doesNotMatch(deliverable.path, /^\./);
     assert.ok(existsSync(resolve(root, deliverable.path)), deliverable.path);
   }
   assert.equal(manifest.metrics.publicSources, 15);
   assert.equal(manifest.metrics.registeredClaims, 18);
+});
+
+test("public tree excludes authoring artifacts and validates a fail-closed file set", () => {
+  const docsIndex = read("docs/index.md");
+  const verify = read("scripts/verify.mjs");
+  const publicFiles = read("scripts/public-files.mjs");
+  const linkCheck = read("scripts/check-links.mjs");
+  const privateDirectoryMarker = Buffer.from("LnN1cGVycG93ZXJz", "base64").toString("utf8");
+
+  assert.equal(existsSync(resolve(root, "docs/hardening")), false);
+  assert.doesNotMatch(docsIndex, /hardening\//i);
+  assert.match(publicFiles, /ls-files/);
+  assert.match(publicFiles, /allowedTopLevelDirectories/);
+  assert.match(publicFiles, /lstatSync/);
+  assert.doesNotMatch(`${verify}\n${publicFiles}`, new RegExp(privateDirectoryMarker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
+  assert.doesNotMatch(linkCheck, new RegExp(privateDirectoryMarker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
 });
 
 test("canonical report is complete and all traceability IDs are registered", () => {

@@ -1,7 +1,14 @@
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, lstatSync, readFileSync, readdirSync } from "node:fs";
 import { extname, join, posix, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { detectForbiddenBinarySignature, forbiddenPublicBinaryExtensions } from "./public-boundaries.mjs";
+import {
+  findRestrictedContent,
+  isPublicTextPath,
+  restrictedAuthoringPatterns,
+  restrictedMetadataPatterns,
+} from "./public-content-policy.mjs";
+import { allowedTopLevelDirectories, listPublicFiles, validatePublicTree } from "./public-files.mjs";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const canonicalTitle = "Vanguard Host Trust: Integrity, Privilege, and Digital Trust";
@@ -28,8 +35,6 @@ const requiredFiles = [
   "research/sources.csv",
   "research/evidence-freeze.md",
   "docs/security-architecture.md",
-  "docs/hardening/hardening.json",
-  "docs/hardening/hardening.md",
   ...requiredProjectFiles,
 ];
 
@@ -71,15 +76,6 @@ function parseCsv(text) {
   }
   const [headers, ...data] = rows;
   return data.map((cells) => Object.fromEntries(headers.map((header, index) => [header, cells[index] ?? ""])));
-}
-
-const skippedDirectories = new Set([".git", ".superpowers", "dist", "node_modules", "release-assets", "tmp"]);
-function walk(directory) {
-  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    const path = join(directory, entry.name);
-    if (skippedDirectories.has(entry.name)) return [];
-    return entry.isDirectory() ? walk(path) : entry.isFile() ? [path] : [];
-  });
 }
 
 function markdownWordCount(text) {
@@ -156,7 +152,6 @@ for (const item of workPackages) {
   }
 }
 
-const excludedManifestRoots = new Set([".git", ".superpowers", "dist", "private", "release-assets", "tmp", "work"]);
 for (const item of deliverables) {
   if (!item.id || !item.title || !item.type || !item.path || !item.status) fail("manifest deliverable is missing a required field");
   const normalized = posix.normalize(item.path);
@@ -164,8 +159,10 @@ for (const item of deliverables) {
   if (item.path.includes("\\") || item.path.startsWith("/") || normalized !== item.path || normalized.startsWith("../")) {
     fail(`${item.id} uses an unsafe deliverable path: ${item.path}`);
   }
-  if (excludedManifestRoots.has(firstSegment)) fail(`${item.id} points outside the public deliverable tree`);
-  if (!existsSync(join(root, item.path)) || !statSync(join(root, item.path)).isFile()) fail(`${item.id} path does not exist: ${item.path}`);
+  if (firstSegment.startsWith(".") || !allowedTopLevelDirectories.has(firstSegment)) {
+    fail(`${item.id} points outside the public deliverable tree`);
+  }
+  if (!existsSync(join(root, item.path)) || !lstatSync(join(root, item.path)).isFile()) fail(`${item.id} path does not exist: ${item.path}`);
   if (item.status !== "complete") fail(`${item.id} is not complete`);
 }
 if (!Array.isArray(manifest.scopeExclusions) || manifest.scopeExclusions.length < 6) fail("manifest scopeExclusions are incomplete");
@@ -251,26 +248,14 @@ for (const file of ["index.html", "styles.css", "app.js", "logic.js"]) {
   if (/\b(fetch|XMLHttpRequest|WebSocket|EventSource)\s*\(/.test(body)) fail(`${file} introduces a runtime network API`);
 }
 
-const textExtensions = new Set(["", ".cjs", ".cff", ".css", ".csv", ".html", ".js", ".json", ".lock", ".md", ".mjs", ".txt", ".yaml", ".yml"]);
-const decodedRegex = (encoded) => new RegExp(Buffer.from(encoded, "base64").toString("utf8"), "i");
-const blockedPatterns = [
-  { label: "restricted identifier label", regex: decodedRegex("bWF0cmljb2xh") },
-  { label: "restricted institutional domain", regex: decodedRegex("KHN0dWRlbnRpXC4pP3VuaW1lXC5pdA==") },
-  { label: "local macOS home path", regex: decodedRegex("L1VzZXJzLw==") },
-  { label: "local Windows home path", regex: /[A-Za-z]:\\Users\\/i },
-  { label: "private learning portal", regex: decodedRegex("bW9vZGxl") },
-  { label: "private document portal", regex: decodedRegex("c2hhcmVwb2ludFwuY29t") },
-  { label: "institutional project code", regex: decodedRegex("U0VDLVBSSi0=") },
-  { label: "email address", regex: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i },
-];
-
-const allFiles = walk(root).filter((path) => statSync(path).isFile());
+const allFiles = listPublicFiles(root);
+for (const error of validatePublicTree(root, allFiles)) fail(error);
 for (const path of allFiles) {
   const rel = relative(root, path);
-  if (!textExtensions.has(extname(path).toLowerCase())) continue;
+  if (!isPublicTextPath(path)) continue;
   const body = readFileSync(path, "utf8");
-  for (const { label, regex } of blockedPatterns) {
-    if (regex.test(body)) fail(`${rel} contains prohibited public metadata: ${label}`);
+  for (const label of findRestrictedContent(body, [...restrictedMetadataPatterns, ...restrictedAuthoringPatterns])) {
+    fail(`${rel} contains prohibited public content: ${label}`);
   }
 }
 
@@ -346,8 +331,6 @@ const pagesWorkflow = readFileSync(join(workflowDirectory, "pages.yml"), "utf8")
 if (!/include-hidden-files:\s*true/.test(pagesWorkflow)) {
   fail("Pages workflow would omit .well-known/security.txt and .nojekyll");
 }
-
-JSON.parse(readFileSync(join(root, "docs/hardening/hardening.json"), "utf8"));
 
 if (!process.exitCode) {
   console.log(`Repository verified: ${sources.length} public sources, ${claims.length} claims, ${reportWords} report words, version ${version}.`);

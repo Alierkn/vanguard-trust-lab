@@ -31,7 +31,6 @@
 - [Security architecture](security-architecture.md)
 - [Repository settings](repository-settings.md)
 - [2026/2027 maintenance calendar](maintenance-calendar.md)
-- [Security hardening review](hardening/hardening.md)
 - [Governance](../GOVERNANCE.md)
 - [Contributing](../CONTRIBUTING.md)
 - [Security policy](../SECURITY.md)
