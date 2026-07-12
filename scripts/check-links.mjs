@@ -40,7 +40,6 @@ function headingAnchors(body) {
   const anchors = new Set();
   for (const match of body.matchAll(/^#{1,6}\s+(.+?)\s*#*$/gm)) {
     const base = match[1]
-      .replace(/<[^>]+>/g, "")
       .replace(/[`*_~]/g, "")
       .toLowerCase()
       .trim()
